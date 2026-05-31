@@ -1,0 +1,78 @@
+{
+    "table_name": "formula_1.constructorStandings",
+    "table_fullname": "formula_1.formula_1.constructorStandings",
+    "column_names": [
+        "constructorStandingsId",
+        "raceId",
+        "constructorId",
+        "points",
+        "position",
+        "positionText",
+        "wins"
+    ],
+    "column_types": [
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "FLOAT",
+        "NUMBER",
+        "TEXT",
+        "NUMBER"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "constructorStandingsId": 1,
+            "raceId": 18,
+            "constructorId": 1,
+            "points": 14.0,
+            "position": 1,
+            "positionText": "1",
+            "wins": 1
+        },
+        {
+            "constructorStandingsId": 2,
+            "raceId": 18,
+            "constructorId": 2,
+            "points": 8.0,
+            "position": 3,
+            "positionText": "3",
+            "wins": 0
+        },
+        {
+            "constructorStandingsId": 3,
+            "raceId": 18,
+            "constructorId": 3,
+            "points": 9.0,
+            "position": 2,
+            "positionText": "2",
+            "wins": 0
+        },
+        {
+            "constructorStandingsId": 4,
+            "raceId": 18,
+            "constructorId": 4,
+            "points": 5.0,
+            "position": 4,
+            "positionText": "4",
+            "wins": 0
+        },
+        {
+            "constructorStandingsId": 5,
+            "raceId": 18,
+            "constructorId": 5,
+            "points": 2.0,
+            "position": 5,
+            "positionText": "5",
+            "wins": 0
+        }
+    ]
+}

@@ -1,0 +1,27 @@
+{
+    "table_name": "superhero.alignment",
+    "table_fullname": "superhero.superhero.alignment",
+    "column_names": [
+        "alignment"
+    ],
+    "column_types": [
+        "TEXT"
+    ],
+    "description": [
+        null
+    ],
+    "sample_rows": [
+        {
+            "alignment": "Good"
+        },
+        {
+            "alignment": "Bad"
+        },
+        {
+            "alignment": "Neutral"
+        },
+        {
+            "alignment": "N/A"
+        }
+    ]
+}

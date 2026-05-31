@@ -1,0 +1,38 @@
+{
+    "table_name": "formula_1.sqlite_sequence",
+    "table_fullname": "formula_1.formula_1.sqlite_sequence",
+    "column_names": [
+        "name",
+        "seq"
+    ],
+    "column_types": [
+        "TEXT",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "name": "b'circuits'",
+            "seq": "b'73'"
+        },
+        {
+            "name": "b'constructorResults'",
+            "seq": "b'15579'"
+        },
+        {
+            "name": "b'constructors'",
+            "seq": "b'210'"
+        },
+        {
+            "name": "b'constructorStandings'",
+            "seq": "b'26872'"
+        },
+        {
+            "name": "b'drivers'",
+            "seq": "b'841'"
+        }
+    ]
+}

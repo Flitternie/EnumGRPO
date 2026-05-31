@@ -1,0 +1,102 @@
+{
+    "table_name": "california_schools.satscores",
+    "table_fullname": "california_schools.california_schools.satscores",
+    "column_names": [
+        "cds",
+        "rtype",
+        "sname",
+        "dname",
+        "enroll12",
+        "NumTstTakr",
+        "AvgScrRead",
+        "AvgScrMath",
+        "AvgScrWrite",
+        "NumGE1500"
+    ],
+    "column_types": [
+        "TEXT",
+        "TEXT",
+        "TEXT",
+        "TEXT",
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "NUMBER"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "cds": "1100170000000",
+            "rtype": "D",
+            "sname": null,
+            "dname": "Alameda County Office of Education",
+            "enroll12": 398,
+            "NumTstTakr": 88,
+            "AvgScrRead": 418,
+            "AvgScrMath": 418,
+            "AvgScrWrite": 417,
+            "NumGE1500": 14
+        },
+        {
+            "cds": "1100170109835",
+            "rtype": "S",
+            "sname": "FAME Public Charter",
+            "dname": "Alameda County Office of Education",
+            "enroll12": 62,
+            "NumTstTakr": 17,
+            "AvgScrRead": 503,
+            "AvgScrMath": 546,
+            "AvgScrWrite": 505,
+            "NumGE1500": 9
+        },
+        {
+            "cds": "1100170112607",
+            "rtype": "S",
+            "sname": "Envision Academy for Arts & Technology",
+            "dname": "Alameda County Office of Education",
+            "enroll12": 75,
+            "NumTstTakr": 71,
+            "AvgScrRead": 397,
+            "AvgScrMath": 387,
+            "AvgScrWrite": 395,
+            "NumGE1500": 5
+        },
+        {
+            "cds": "1100170118489",
+            "rtype": "S",
+            "sname": "Aspire California College Preparatory Academy",
+            "dname": "Alameda County Office of Education",
+            "enroll12": 61,
+            "NumTstTakr": 0,
+            "AvgScrRead": null,
+            "AvgScrMath": null,
+            "AvgScrWrite": null,
+            "NumGE1500": null
+        },
+        {
+            "cds": "1611190000000",
+            "rtype": "D",
+            "sname": null,
+            "dname": "Alameda Unified",
+            "enroll12": 922,
+            "NumTstTakr": 544,
+            "AvgScrRead": 521,
+            "AvgScrMath": 546,
+            "AvgScrWrite": 519,
+            "NumGE1500": 333
+        }
+    ]
+}

@@ -1,0 +1,134 @@
+# learning/plan_library.yaml
+#
+# Per-axis snippet library for plan-enumeration rollout diversity.
+#
+# Each axis option has a pre-written hint paragraph.  The full strategy hint
+# for any combination of axis values is assembled by concatenating the selected
+# snippets in a fixed order: D (paradigm framing) -> A (operator type) ->
+# B (placement) -> C (scope) -> F (projection width).
+#
+# When D=code_driven, axes A and F are skipped (the LLM never processes tuples).
+#
+# The adaptive_hint is used for the diagnose_adaptive meta-plan; it replaces
+# all axis snippets.
+#
+# User-editable: improve snippet text iteratively without changing code.
+
+axes:
+
+  # ------------------------------------------------------------------ #
+  # Axis D: Execution Paradigm                                          #
+  # ------------------------------------------------------------------ #
+  D_execution_paradigm:
+    data_driven: >
+      Use a data-driven approach: pass dirty tuples directly to an LLM operator
+      (llm_map or llm_reduce) for semantic processing.  The LLM handles each row
+      or aggregated set at runtime.
+    code_driven: >
+      Use a code-driven approach: do NOT call llm_map or llm_reduce on data rows.
+      Instead, inspect 5-10 sample dirty values, then ask the LLM (in a single
+      planning call) to write a deterministic SQL expression -- a CASE WHEN chain,
+      a regexp_replace, or a user-defined function -- that cleans the column
+      natively inside DuckDB.  Execute that SQL rule for all rows.  This costs
+      one LLM planning call regardless of table size.  Choose this when the
+      dirtiness follows a detectable pattern (date formats, currency symbols,
+      common abbreviations, unit normalization).
+
+  # ------------------------------------------------------------------ #
+  # Axis A: Operator Type  (skip when D=code_driven)                   #
+  # ------------------------------------------------------------------ #
+  A_operator_type:
+    map: >
+      Use llm_map as the LLM operator: it processes rows individually,
+      applying the LLM to each row (or a batched group of rows) one at a time.
+      Prefer this when per-row semantic repair or classification is needed and
+      rows are independent of each other.
+    reduce: >
+      Use llm_reduce as the LLM operator: it receives the entire (pre-filtered
+      or pre-aggregated) result set in a single prompt and produces one output.
+      Prefer this when the task requires cross-row reasoning, ranking, or
+      disambiguation among a small candidate set -- e.g., resolving which of
+      several candidate company names refers to the same entity.
+
+  # ------------------------------------------------------------------ #
+  # Axis B: Operator Placement                                          #
+  # ------------------------------------------------------------------ #
+  B_operator_placement:
+    pre_agg: >
+      Place the LLM operator mid-pipeline, BEFORE any GROUP BY, aggregation, or
+      LIMIT.  Use this only when the dirty column is itself a WHERE predicate or
+      JOIN key -- i.e., the downstream SQL cannot be evaluated without first
+      normalizing the dirty value.  Pattern: SQL filters (on clean columns) ->
+      LLM operator (normalizes dirty column) -> SQL filters (on normalized output).
+      Do NOT use pre-placement when the dirty column appears only in the SELECT
+      list or a final computed field; post-placement is cheaper there.
+    post_agg: >
+      Place the LLM operator AFTER all SQL filters, joins, and aggregations.
+      Push every available SQL predicate (equality, range, NOT NULL, JOIN,
+      GROUP BY, LIMIT) to the front of the plan so the LLM operator sees only
+      the smallest possible result set.  Use this when the dirty column is in
+      the projection (SELECT list) or the final output, not in a filter predicate.
+
+  # ------------------------------------------------------------------ #
+  # Axis C: Selectivity Scope                                           #
+  # ------------------------------------------------------------------ #
+  C_selectivity_scope:
+    full: >
+      Pass the complete filtered working set to the LLM operator -- all rows
+      that survive the upstream SQL predicates.  Use this when it is not
+      possible to narrow further without LLM help, or when the query result
+      depends on processing every surviving row (e.g., SUM over a dirty numeric
+      column that needs unit normalization on every row).
+    targeted: >
+      Identify the minimum set of dirty cells strictly required to answer the
+      query before invoking any LLM operator.  Use a tight WHERE clause on the
+      LLM op call to restrict it to only the specific rows and columns where
+      semantic repair is necessary.  Write repaired values to a temp table, then
+      answer the query entirely in SQL against the cleaned view.  Do not repair
+      anything beyond what the query strictly requires.
+
+  # ------------------------------------------------------------------ #
+  # Axis F: Context Projection Width  (skip when D=code_driven)        #
+  # ------------------------------------------------------------------ #
+  F_projection_width:
+    narrow: >
+      Use NARROW projection: pass only the dirty column and the primary key (or
+      row identifier) to each LLM call.  This minimizes per-call token cost.
+      Choose narrow when the dirty value is self-contained and unambiguous
+      without surrounding context (e.g., a misspelled numeric string, a date in
+      the wrong format, a missing unit suffix).
+    wide: >
+      Use WIDE projection: include the full row or a semantically relevant set
+      of context columns alongside the dirty column in each LLM call.  Choose
+      wide when the dirty value is ambiguous without context -- e.g., an
+      abbreviated company name ("Appl") that can only be resolved correctly if
+      the industry ("Tech") and location ("Cupertino") columns are visible.
+      Wide projection increases per-call token cost but reduces correction errors
+      on semantically ambiguous values.
+
+# ------------------------------------------------------------------ #
+# Adaptive meta-plan (replaces all axis snippets when selected)      #
+# ------------------------------------------------------------------ #
+adaptive_hint: >
+  Use a DIAGNOSTIC ADAPTIVE approach: before committing to any fixed execution
+  strategy, first sample 10-20 rows from the columns implicated in the task.
+  Inspect null rates, value distributions, format patterns, and semantic
+  variance to characterize the dirtiness type and cardinality.  Then choose
+  the most appropriate operator type (llm_map / llm_reduce / SQL rule),
+  placement (pre- vs. post-aggregation), scope (full vs. targeted), and
+  projection width (narrow vs. wide) based on the observed data characteristics.
+  This mirrors runtime adaptive query processing (Eddies): commit to a plan
+  only after observing actual statistics, not before.
+
+# ------------------------------------------------------------------ #
+# Reference combinations (documentation only; not used by code)      #
+# ------------------------------------------------------------------ #
+# The 7 reference plans from the design document and their axis values:
+#
+#  map_post_full_wide:      D=data_driven, A=map,    B=post_agg, C=full,     F=wide
+#  map_post_full_narrow:    D=data_driven, A=map,    B=post_agg, C=full,     F=narrow
+#  map_pre_targeted_narrow: D=data_driven, A=map,    B=pre_agg,  C=targeted, F=narrow
+#  reduce_post_full_wide:   D=data_driven, A=reduce, B=post_agg, C=full,     F=wide
+#  reduce_pre_targeted:     D=data_driven, A=reduce, B=pre_agg,  C=targeted, F=narrow
+#  code_gen_post:           D=code_driven,           B=post_agg, C=full
+#  diagnose_adaptive:       adaptive

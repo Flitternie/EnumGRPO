@@ -1,0 +1,38 @@
+{
+    "table_name": "formula_1.status",
+    "table_fullname": "formula_1.formula_1.status",
+    "column_names": [
+        "statusId",
+        "status"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "statusId": 1,
+            "status": "Finished"
+        },
+        {
+            "statusId": 2,
+            "status": "Disqualified"
+        },
+        {
+            "statusId": 3,
+            "status": "Accident"
+        },
+        {
+            "statusId": 4,
+            "status": "Collision"
+        },
+        {
+            "statusId": 5,
+            "status": "Engine"
+        }
+    ]
+}

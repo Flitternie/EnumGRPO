@@ -1,0 +1,70 @@
+{
+    "table_name": "formula_1.lapTimes",
+    "table_fullname": "formula_1.formula_1.lapTimes",
+    "column_names": [
+        "raceId",
+        "driverId",
+        "lap",
+        "position",
+        "time",
+        "milliseconds"
+    ],
+    "column_types": [
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "TEXT",
+        "NUMBER"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "raceId": 1,
+            "driverId": 1,
+            "lap": 1,
+            "position": 13,
+            "time": "1:49.088",
+            "milliseconds": 109088
+        },
+        {
+            "raceId": 1,
+            "driverId": 1,
+            "lap": 2,
+            "position": 12,
+            "time": "1:33.740",
+            "milliseconds": 93740
+        },
+        {
+            "raceId": 1,
+            "driverId": 1,
+            "lap": 3,
+            "position": 11,
+            "time": "1:31.600",
+            "milliseconds": 91600
+        },
+        {
+            "raceId": 1,
+            "driverId": 1,
+            "lap": 4,
+            "position": 10,
+            "time": "1:31.067",
+            "milliseconds": 91067
+        },
+        {
+            "raceId": 1,
+            "driverId": 1,
+            "lap": 5,
+            "position": 10,
+            "time": "1:32.129",
+            "milliseconds": 92129
+        }
+    ]
+}

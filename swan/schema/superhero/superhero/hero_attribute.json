@@ -1,0 +1,46 @@
+{
+    "table_name": "superhero.hero_attribute",
+    "table_fullname": "superhero.superhero.hero_attribute",
+    "column_names": [
+        "hero_id",
+        "attribute_id",
+        "attribute_value"
+    ],
+    "column_types": [
+        "NUMBER",
+        "NUMBER",
+        "NUMBER"
+    ],
+    "description": [
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "hero_id": 1,
+            "attribute_id": 1,
+            "attribute_value": 80
+        },
+        {
+            "hero_id": 2,
+            "attribute_id": 1,
+            "attribute_value": 75
+        },
+        {
+            "hero_id": 3,
+            "attribute_id": 1,
+            "attribute_value": 95
+        },
+        {
+            "hero_id": 4,
+            "attribute_id": 1,
+            "attribute_value": 80
+        },
+        {
+            "hero_id": 5,
+            "attribute_id": 1,
+            "attribute_value": 85
+        }
+    ]
+}

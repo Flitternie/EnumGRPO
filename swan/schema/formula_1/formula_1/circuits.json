@@ -1,0 +1,62 @@
+{
+    "table_name": "formula_1.circuits",
+    "table_fullname": "formula_1.formula_1.circuits",
+    "column_names": [
+        "circuitId",
+        "circuitRef",
+        "name",
+        "location",
+        "alt"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT",
+        "TEXT",
+        "TEXT",
+        "NUMBER"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "circuitId": 2,
+            "circuitRef": "sepang",
+            "name": "Sepang International Circuit",
+            "location": "Kuala Lumpur",
+            "alt": null
+        },
+        {
+            "circuitId": 3,
+            "circuitRef": "bahrain",
+            "name": "Bahrain International Circuit",
+            "location": "Sakhir",
+            "alt": null
+        },
+        {
+            "circuitId": 4,
+            "circuitRef": "catalunya",
+            "name": "Circuit de Barcelona-Catalunya",
+            "location": "Montmeló",
+            "alt": null
+        },
+        {
+            "circuitId": 5,
+            "circuitRef": "istanbul",
+            "name": "Istanbul Park",
+            "location": "Istanbul",
+            "alt": null
+        },
+        {
+            "circuitId": 6,
+            "circuitRef": "monaco",
+            "name": "Circuit de Monaco",
+            "location": "Monte-Carlo",
+            "alt": null
+        }
+    ]
+}

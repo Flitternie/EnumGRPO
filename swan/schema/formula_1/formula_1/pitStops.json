@@ -1,0 +1,78 @@
+{
+    "table_name": "formula_1.pitStops",
+    "table_fullname": "formula_1.formula_1.pitStops",
+    "column_names": [
+        "raceId",
+        "driverId",
+        "stop",
+        "lap",
+        "time",
+        "duration",
+        "milliseconds"
+    ],
+    "column_types": [
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "TEXT",
+        "TEXT",
+        "NUMBER"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "raceId": 841,
+            "driverId": 1,
+            "stop": 1,
+            "lap": 16,
+            "time": "17:28:24",
+            "duration": "23.227",
+            "milliseconds": 23227
+        },
+        {
+            "raceId": 841,
+            "driverId": 1,
+            "stop": 2,
+            "lap": 36,
+            "time": "17:59:29",
+            "duration": "23.199",
+            "milliseconds": 23199
+        },
+        {
+            "raceId": 841,
+            "driverId": 2,
+            "stop": 1,
+            "lap": 15,
+            "time": "17:27:41",
+            "duration": "22.994",
+            "milliseconds": 22994
+        },
+        {
+            "raceId": 841,
+            "driverId": 2,
+            "stop": 2,
+            "lap": 30,
+            "time": "17:51:32",
+            "duration": "25.098",
+            "milliseconds": 25098
+        },
+        {
+            "raceId": 841,
+            "driverId": 3,
+            "stop": 1,
+            "lap": 16,
+            "time": "17:29:00",
+            "duration": "23.716",
+            "milliseconds": 23716
+        }
+    ]
+}

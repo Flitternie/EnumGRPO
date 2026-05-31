@@ -1,0 +1,46 @@
+{
+    "table_name": "formula_1.constructors",
+    "table_fullname": "formula_1.formula_1.constructors",
+    "column_names": [
+        "constructorId",
+        "constructorRef",
+        "name"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "constructorId": 1,
+            "constructorRef": "mclaren",
+            "name": "McLaren"
+        },
+        {
+            "constructorId": 2,
+            "constructorRef": "bmw_sauber",
+            "name": "BMW Sauber"
+        },
+        {
+            "constructorId": 3,
+            "constructorRef": "williams",
+            "name": "Williams"
+        },
+        {
+            "constructorId": 4,
+            "constructorRef": "renault",
+            "name": "Renault"
+        },
+        {
+            "constructorId": 5,
+            "constructorRef": "toro_rosso",
+            "name": "Toro Rosso"
+        }
+    ]
+}

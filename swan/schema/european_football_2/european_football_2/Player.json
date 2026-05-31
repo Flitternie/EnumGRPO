@@ -1,0 +1,62 @@
+{
+    "table_name": "european_football_2.Player",
+    "table_fullname": "european_football_2.european_football_2.Player",
+    "column_names": [
+        "id",
+        "player_api_id",
+        "player_name",
+        "player_fifa_api_id",
+        "weight"
+    ],
+    "column_types": [
+        "TEXT",
+        "TEXT",
+        "TEXT",
+        "TEXT",
+        "FLOAT"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "id": "1",
+            "player_api_id": "505942",
+            "player_name": "Aaron Appindangoye",
+            "player_fifa_api_id": "218353",
+            "weight": 187.0
+        },
+        {
+            "id": "3",
+            "player_api_id": "162549",
+            "player_name": "Aaron Doran",
+            "player_fifa_api_id": "186170",
+            "weight": 163.0
+        },
+        {
+            "id": "4",
+            "player_api_id": "30572",
+            "player_name": "Aaron Galindo",
+            "player_fifa_api_id": "140161",
+            "weight": 198.0
+        },
+        {
+            "id": "5",
+            "player_api_id": "23780",
+            "player_name": "Aaron Hughes",
+            "player_fifa_api_id": "17725",
+            "weight": 154.0
+        },
+        {
+            "id": "6",
+            "player_api_id": "27316",
+            "player_name": "Aaron Hunt",
+            "player_fifa_api_id": "158138",
+            "weight": 161.0
+        }
+    ]
+}

@@ -1,0 +1,62 @@
+{
+    "table_name": "superhero.superhero",
+    "table_fullname": "superhero.superhero.superhero",
+    "column_names": [
+        "id",
+        "superhero_name",
+        "full_name",
+        "height_cm",
+        "weight_kg"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT",
+        "TEXT",
+        "NUMBER",
+        "NUMBER"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "id": 1,
+            "superhero_name": "3-D Man",
+            "full_name": "Charles Chandler",
+            "height_cm": 188,
+            "weight_kg": 90
+        },
+        {
+            "id": 2,
+            "superhero_name": "A-Bomb",
+            "full_name": "Richard Milhouse Jones",
+            "height_cm": 203,
+            "weight_kg": 441
+        },
+        {
+            "id": 3,
+            "superhero_name": "Abe Sapien",
+            "full_name": "Abraham Sapien",
+            "height_cm": 191,
+            "weight_kg": 65
+        },
+        {
+            "id": 4,
+            "superhero_name": "Abin Sur",
+            "full_name": "-",
+            "height_cm": 185,
+            "weight_kg": 90
+        },
+        {
+            "id": 5,
+            "superhero_name": "Abomination",
+            "full_name": "Emil Blonsky",
+            "height_cm": 203,
+            "weight_kg": 441
+        }
+    ]
+}

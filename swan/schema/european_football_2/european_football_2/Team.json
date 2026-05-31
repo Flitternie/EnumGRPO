@@ -1,0 +1,54 @@
+{
+    "table_name": "european_football_2.Team",
+    "table_fullname": "european_football_2.european_football_2.Team",
+    "column_names": [
+        "id",
+        "team_api_id",
+        "team_fifa_api_id",
+        "team_long_name"
+    ],
+    "column_types": [
+        "TEXT",
+        "TEXT",
+        "TEXT",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "id": "1",
+            "team_api_id": "9987",
+            "team_fifa_api_id": "673",
+            "team_long_name": "KRC Genk"
+        },
+        {
+            "id": "2",
+            "team_api_id": "9993",
+            "team_fifa_api_id": "675",
+            "team_long_name": "Beerschot AC"
+        },
+        {
+            "id": "3",
+            "team_api_id": "10000",
+            "team_fifa_api_id": "15005",
+            "team_long_name": "SV Zulte-Waregem"
+        },
+        {
+            "id": "4",
+            "team_api_id": "9994",
+            "team_fifa_api_id": "2007",
+            "team_long_name": "Sporting Lokeren"
+        },
+        {
+            "id": "5",
+            "team_api_id": "9984",
+            "team_fifa_api_id": "1750",
+            "team_long_name": "KSV Cercle Brugge"
+        }
+    ]
+}

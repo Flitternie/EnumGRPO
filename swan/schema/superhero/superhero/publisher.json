@@ -1,0 +1,38 @@
+{
+    "table_name": "superhero.publisher",
+    "table_fullname": "superhero.superhero.publisher",
+    "column_names": [
+        "id",
+        "publisher_name"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "id": 1,
+            "publisher_name": ""
+        },
+        {
+            "id": 2,
+            "publisher_name": "ABC Studios"
+        },
+        {
+            "id": 3,
+            "publisher_name": "Dark Horse Comics"
+        },
+        {
+            "id": 4,
+            "publisher_name": "DC Comics"
+        },
+        {
+            "id": 5,
+            "publisher_name": "George Lucas"
+        }
+    ]
+}

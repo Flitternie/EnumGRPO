@@ -1,0 +1,38 @@
+{
+    "table_name": "formula_1.seasons",
+    "table_fullname": "formula_1.formula_1.seasons",
+    "column_names": [
+        "year",
+        "url"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "year": 1950,
+            "url": "http://en.wikipedia.org/wiki/1950_Formula_One_season"
+        },
+        {
+            "year": 1951,
+            "url": "http://en.wikipedia.org/wiki/1951_Formula_One_season"
+        },
+        {
+            "year": 1952,
+            "url": "http://en.wikipedia.org/wiki/1952_Formula_One_season"
+        },
+        {
+            "year": 1953,
+            "url": "http://en.wikipedia.org/wiki/1953_Formula_One_season"
+        },
+        {
+            "year": 1954,
+            "url": "http://en.wikipedia.org/wiki/1954_Formula_One_season"
+        }
+    ]
+}

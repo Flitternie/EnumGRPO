@@ -1,0 +1,70 @@
+{
+    "table_name": "formula_1.races",
+    "table_fullname": "formula_1.formula_1.races",
+    "column_names": [
+        "raceId",
+        "year",
+        "round",
+        "circuitId",
+        "name",
+        "time"
+    ],
+    "column_types": [
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "TEXT",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "raceId": 1,
+            "year": 2009,
+            "round": 1,
+            "circuitId": 1,
+            "name": "Australian Grand Prix",
+            "time": "06:00:00"
+        },
+        {
+            "raceId": 2,
+            "year": 2009,
+            "round": 2,
+            "circuitId": 2,
+            "name": "Malaysian Grand Prix",
+            "time": "09:00:00"
+        },
+        {
+            "raceId": 3,
+            "year": 2009,
+            "round": 3,
+            "circuitId": 17,
+            "name": "Chinese Grand Prix",
+            "time": "07:00:00"
+        },
+        {
+            "raceId": 4,
+            "year": 2009,
+            "round": 4,
+            "circuitId": 3,
+            "name": "Bahrain Grand Prix",
+            "time": "12:00:00"
+        },
+        {
+            "raceId": 5,
+            "year": 2009,
+            "round": 5,
+            "circuitId": 4,
+            "name": "Spanish Grand Prix",
+            "time": "12:00:00"
+        }
+    ]
+}

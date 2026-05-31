@@ -1,0 +1,38 @@
+{
+    "table_name": "european_football_2.sqlite_sequence",
+    "table_fullname": "european_football_2.european_football_2.sqlite_sequence",
+    "column_names": [
+        "name",
+        "seq"
+    ],
+    "column_types": [
+        "TEXT",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "name": "Team",
+            "seq": "103916"
+        },
+        {
+            "name": "Player",
+            "seq": "11075"
+        },
+        {
+            "name": "Player_Attributes",
+            "seq": "183978"
+        },
+        {
+            "name": "Team_Attributes",
+            "seq": "1458"
+        },
+        {
+            "name": "Match",
+            "seq": "25979"
+        }
+    ]
+}

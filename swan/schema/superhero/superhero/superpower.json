@@ -1,0 +1,38 @@
+{
+    "table_name": "superhero.superpower",
+    "table_fullname": "superhero.superhero.superpower",
+    "column_names": [
+        "id",
+        "power_name"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "id": 1,
+            "power_name": "Agility"
+        },
+        {
+            "id": 2,
+            "power_name": "Accelerated Healing"
+        },
+        {
+            "id": 3,
+            "power_name": "Lantern Power Ring"
+        },
+        {
+            "id": 4,
+            "power_name": "Dimensional Awareness"
+        },
+        {
+            "id": 5,
+            "power_name": "Cold Resistance"
+        }
+    ]
+}

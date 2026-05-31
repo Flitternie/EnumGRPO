@@ -1,0 +1,62 @@
+{
+    "table_name": "formula_1.drivers",
+    "table_fullname": "formula_1.formula_1.drivers",
+    "column_names": [
+        "driverId",
+        "driverRef",
+        "number",
+        "forename",
+        "surname"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT",
+        "NUMBER",
+        "TEXT",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "driverId": 1,
+            "driverRef": "hamilton",
+            "number": 44,
+            "forename": "Lewis",
+            "surname": "Hamilton"
+        },
+        {
+            "driverId": 2,
+            "driverRef": "heidfeld",
+            "number": null,
+            "forename": "Nick",
+            "surname": "Heidfeld"
+        },
+        {
+            "driverId": 3,
+            "driverRef": "rosberg",
+            "number": 6,
+            "forename": "Nico",
+            "surname": "Rosberg"
+        },
+        {
+            "driverId": 4,
+            "driverRef": "alonso",
+            "number": 14,
+            "forename": "Fernando",
+            "surname": "Alonso"
+        },
+        {
+            "driverId": 5,
+            "driverRef": "kovalainen",
+            "number": null,
+            "forename": "Heikki",
+            "surname": "Kovalainen"
+        }
+    ]
+}

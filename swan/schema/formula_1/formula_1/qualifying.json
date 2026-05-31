@@ -1,0 +1,94 @@
+{
+    "table_name": "formula_1.qualifying",
+    "table_fullname": "formula_1.formula_1.qualifying",
+    "column_names": [
+        "qualifyId",
+        "raceId",
+        "driverId",
+        "constructorId",
+        "number",
+        "position",
+        "q1",
+        "q2",
+        "q3"
+    ],
+    "column_types": [
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "NUMBER",
+        "TEXT",
+        "TEXT",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "qualifyId": 1,
+            "raceId": 18,
+            "driverId": 1,
+            "constructorId": 1,
+            "number": 22,
+            "position": 1,
+            "q1": "1:26.572",
+            "q2": "1:25.187",
+            "q3": "1:26.714"
+        },
+        {
+            "qualifyId": 2,
+            "raceId": 18,
+            "driverId": 9,
+            "constructorId": 2,
+            "number": 4,
+            "position": 2,
+            "q1": "1:26.103",
+            "q2": "1:25.315",
+            "q3": "1:26.869"
+        },
+        {
+            "qualifyId": 3,
+            "raceId": 18,
+            "driverId": 5,
+            "constructorId": 1,
+            "number": 23,
+            "position": 3,
+            "q1": "1:25.664",
+            "q2": "1:25.452",
+            "q3": "1:27.079"
+        },
+        {
+            "qualifyId": 4,
+            "raceId": 18,
+            "driverId": 13,
+            "constructorId": 6,
+            "number": 2,
+            "position": 4,
+            "q1": "1:25.994",
+            "q2": "1:25.691",
+            "q3": "1:27.178"
+        },
+        {
+            "qualifyId": 5,
+            "raceId": 18,
+            "driverId": 2,
+            "constructorId": 2,
+            "number": 3,
+            "position": 5,
+            "q1": "1:25.960",
+            "q2": "1:25.518",
+            "q3": "1:27.236"
+        }
+    ]
+}

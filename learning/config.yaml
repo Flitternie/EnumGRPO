@@ -1,0 +1,110 @@
+# learning/config.yaml
+# Default hyperparameters for the training-free GRPO loop.
+#
+# Usage:
+#   python -m learning.cli --config learning/config.yaml
+#
+# Any value here can be overridden by a CLI flag.
+# Set DB_FILES_DIR in .env to point at the directory containing your .duckdb files.
+
+experiment:
+  exp_id: enumgrpo
+  # Path to the agent system prompt file.  Overrides the default db_system_prompt.md.
+  # Use the simplified prompt to let training-free GRPO learn strategies from scratch.
+  system_prompt_path: agent/codebase/prompts/agentic_db_plain.md
+  # Directory for per-run log files.
+  # Each run creates: <log_dir>/<exp_id>/<YYYYMMDD_HHMMSS>/learning.log
+  # Set to null to disable file logging.
+  log_dir: exp/learning
+
+data:
+  practice_path: swan/learning.jsonl  # 20 questions for GRPO practice
+  eval_path: null        # optional; if null, practice data is reused
+
+practice:
+  # Rollout
+  epochs: 1
+  queries_per_update: 2
+  grpo_n: 5
+  # Max number of agent runs executing in parallel (independent of above).
+  rollout_concurrency: 10
+  rollout_temperature: 0.7
+  rollout_data_truncate: null   # null = no truncation
+  task_timeout: 1800            # seconds per rollout before cancellation
+  max_retries: 3
+  max_steps_per_rollout: 40   # null = use default (600); set to N to cap tool calls per agent run
+  mcp_result_max_chars: 4000  # null = use env/default (4000); set to N to cap tool result chars per call
+  shuffle_data: true
+
+  # Restart / caching
+  restart_step: null            # null = reuse cache for all completed steps
+
+  # Checkpoint — pause after every N completed batches and write a
+  # checkpoint.json so the run can be resumed automatically.
+  # Set to null to run straight through without pausing.
+  # Example: checkpoint_every: 5   → stop after batches 5, 10, 15, …
+  # On resume the CLI reads checkpoint.json and sets restart_step automatically.
+  checkpoint_every: null
+
+  # Experience distillation
+  # agent_objective: one-sentence description of what the agent does (injected into distillation prompts).
+  agent_objective: >
+    A database agent that answers analytical queries over DuckDB databases
+    using SQL and LLM operators for data that requires
+    semantic reasoning or repair.
+  # learning_objective: what workflow planning strategies the loop should teach the agent.
+  # Instead of hardcoded rules, this objective encourages the distillation agent to 
+  # discover strategies by reasoning about the efficiency and correctness of 
+  # different trajectories from a database systems perspective.
+  learning_objective: >
+    Discover and refine database-oriented workflow planning strategies that 
+    minimize LLM operator token cost while maximizing answer correctness. 
+    The goal is to learn how to reason about data cardinality, operator 
+    latency/cost tradeoffs, and logical operation sequencing (e.g., filtering 
+    before inference, verifying schema before guessing) to achieve efficient 
+    and robust query execution.
+  given_ground_truth: true      # filter to partially-correct groups (0 < avg_perf < 1)
+  num_experiences_per_query: 3
+  distillation_concurrency: 16   # max concurrent LLM calls during experience distillation
+
+  # Plan-enumeration rollout diversity
+  # When plan_enumeration is true, each of the grpo_n attempts for a query is
+  # seeded with a distinct structural strategy hint assembled from plan_library.yaml.
+  # The enumerator LLM (same as the learning LLM) selects the k most promising
+  # axis-value combinations for each query.  One cheap LLM call per query per epoch.
+  plan_enumeration: true
+  plan_library_path: learning/plan_library.yaml
+
+  # Evaluation
+  do_eval: false
+  eval_strategy: epoch          # "epoch" | "steps"
+  eval_steps: 1
+  eval_data_truncate: null
+
+evaluation:
+  concurrency: 32
+  pass_k: 1
+
+  # Verifier — defaults to the built-in multi-objective reward function.
+  verify_module: learning.verify
+  verify_func_name: verify_func
+
+  # Multi-objective reward weights.
+  #
+  # verify_func returns:  reward = perf = w_sr·sr + w_row·row_f1 + w_item·item_f1   ∈ [0, 1]
+  #
+  # Cost is applied group-relative in the experience updater:
+  #   token_rank = (tokens − min_tokens) / max(max_tokens − min_tokens, 1)   ∈ [0, 1]
+  #   step_rank  = (steps  − min_steps)  / max(max_steps  − min_steps,  1)   ∈ [0, 1]
+  #   cost_rank  = w_token·token_rank + w_step·step_rank                      ∈ [0, 1]
+  #   final_reward = perf − w_cost · cost_rank
+  #
+  # w_token + w_step should sum to 1 so cost_rank stays in [0, 1].
+  # Cost only separates rollouts with similar performance, and is always
+  # normalised within the same query's group — never across queries.
+  reward_w_sr: 0.5
+  reward_w_row: 0.3
+  reward_w_item: 0.2
+  reward_w_cost: 0.2      # overall weight of the composite cost penalty
+  reward_w_token: 0.7     # weight of llmop token rank within the cost composite
+  reward_w_steps: 0.3     # weight of MCP step count rank within the cost composite

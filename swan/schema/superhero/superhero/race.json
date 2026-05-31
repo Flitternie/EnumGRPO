@@ -1,0 +1,38 @@
+{
+    "table_name": "superhero.race",
+    "table_fullname": "superhero.superhero.race",
+    "column_names": [
+        "id",
+        "race"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "id": 1,
+            "race": "-"
+        },
+        {
+            "id": 2,
+            "race": "Alien"
+        },
+        {
+            "id": 3,
+            "race": "Alpha"
+        },
+        {
+            "id": 4,
+            "race": "Amazon"
+        },
+        {
+            "id": 5,
+            "race": "Android"
+        }
+    ]
+}

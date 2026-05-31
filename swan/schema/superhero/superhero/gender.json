@@ -1,0 +1,30 @@
+{
+    "table_name": "superhero.gender",
+    "table_fullname": "superhero.superhero.gender",
+    "column_names": [
+        "id",
+        "gender"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "id": 1,
+            "gender": "Male"
+        },
+        {
+            "id": 2,
+            "gender": "Female"
+        },
+        {
+            "id": 3,
+            "gender": "N/A"
+        }
+    ]
+}

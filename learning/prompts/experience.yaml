@@ -1,0 +1,680 @@
+SINGLE_ROLLOUT_SUMMARY_TEMPLATE_SP: |
+  You are a database-query-optimizer analyst. Your job is to read a single agent
+  trajectory and produce a COMPACT, structured digest that will later be compared
+  against 4-5 other attempts at the same query to extract workflow planning lessons.
+
+  The working agent and learning objective are:
+  <Working Agent Objective>
+  {{ agent_objective }}
+  </Working Agent Objective>
+  <Learning Objective>
+  {{ learning_objective }}
+  </Learning Objective>
+
+  <Output Format>
+  Write exactly these five sections. Be brief — each section must fit in the space
+  shown. Do NOT add extra commentary outside these sections.
+
+  Strategy: [1-2 sentences: what high-level plan did the agent choose?]
+
+  Key Steps:
+  - [tool(brief_params) → result_summary | rows_in→rows_out | LLM tokens if applicable | ERROR if failed]
+  - (one bullet per significant MCP tool call; skip trivial schema lookups unless they reveal something)
+
+  Outcome: [1 sentence: what did the agent produce and was it correct?]
+
+  Efficiency: [steps=N, llmop_tokens=N, num_steps=N; note any clear waste or savings]
+
+  Root Cause: [1 sentence: the primary reason this attempt scored advantage={{ advantage }} —
+               what decision drove success or failure relative to other attempts?]
+  </Output Format>
+
+  <Language>
+  Use the same language as the input trajectory.
+  </Language>
+
+SINGLE_ROLLOUT_SUMMARY_TEMPLATE_UP: |
+  <Working Agent Input>
+  {{ question }}
+  </Working Agent Input>
+
+  <Ground Truth>
+  {{ answer }}
+  </Ground Truth>
+
+  <Agent Output (first 5 rows)>
+  {{ agent_output }}
+  </Agent Output (first 5 rows)>
+
+  <Scores>
+  Performance reward: {{ perf_reward }}  |  Advantage: {{ advantage }}
+  (Advantage is group-normalised: positive = above average for this query, negative = below)
+  </Scores>
+
+  <Critique>
+  {{ critique }}
+  </Critique>
+
+  <Execution Profile and Trajectory>
+  The Execution Profile is a compact list of every MCP tool call in this trajectory.
+  Each entry shows: tool name, wall-clock duration (ms), operation context (truncated SQL /
+  relation name / question), cardinality (rows in / rows out), result sample (column names
+  and up to 2 data rows for SQL-returning ops), and LLM tokens (input / output, only for
+  LLM operators). Fields are omitted when not applicable.
+
+  {{ trajectory }}
+  </Execution Profile and Trajectory>
+
+  Follow the output format above.
+
+SINGLE_QUERY_GROUP_ADVANTAGE_SP: |
+  Your ultimate goal is to help improve the working agent's performance by extracting useful experiences from its past trajectories, which should focus on the learning objective and will be used in the future to guide the agent's behavior. The working agent and learning objective are defined as follows:
+  <Working Agent Objective>
+  {{ agent_objective }}
+  </Working Agent Objective>
+  <Learning Objective>
+  {{ learning_objective }}
+  </Learning Objective>
+
+  Now, your task is to review the performance of the agent across multiple trajectories for the same query, and extract high-level experiences that can guide future behavior aligned with the learning objective.
+
+  <Your Input>
+  - Agent Input: [The specific input task given to the working agent. Each trajectory has three associated scores: **Advantage** is the combined headline score (positive = above-average, negative = below-average); **Correctness** is the group-relative correctness score (positive = more accurate than average for this query); **Efficiency** is the group-relative efficiency score (positive = fewer LLM-operator tokens and tool-call steps than average for this query). All three are group-normalised z-scores so they are comparable across queries of different difficulty.]
+  - Ground Truth (Optional): [If available, the ground truth answer to the agent input]
+  - Trajectories: Compact summaries of multiple attempts by the agent to solve the same input task, each labeled with its group-relative advantage.
+  </Your Input>
+
+  <Database Systems Thinking Perspective>
+  When comparing trajectories, use these lenses to identify why some attempts were more efficient or successful than others:
+
+  1. Data Volume & Cardinality Control: Which trajectories successfully narrowed the problem size before applying expensive operations?
+  2. Cost-Benefit Tradeoffs: Did higher-advantage trajectories favor cheaper SQL/schema ops over immediate LLM inference?
+  3. Execution Plan Robustness: How did different trajectories handle schema ambiguity or data corruption? Which path was the most data-driven and least prone to hallucination?
+  4. Tool Sequencing: What specific ordering of operations differentiated the successful attempts from the unsuccessful ones?
+  5. Convergence Speed: Which trajectory reached the correct answer with the fewest and most targeted tool calls?
+  </Database Systems Thinking Perspective>
+
+  <Task Instructions>
+  1. Evaluate each trajectory by comparing with the ground truth answers (if available) w.r.t. the learning objective:
+    - Identify which trajectories are better (higher advantage) and which are worse (lower advantage)
+    - Analyze the workflow differences through the Database Systems Thinking Perspective
+
+  2. For low-advantage trajectories:
+    - Diagnose the root causes of inefficiency or failure — e.g., unnecessary data volume, poor operator choice, or illogical sequencing.
+    - Extract specific failure patterns relevant to the learning objective
+
+  3. For high-advantage trajectories:
+    - Identify the key workflow planning decisions that led to efficiency and correctness
+    - Document what made these approaches work well in this specific DB context
+
+  4. Extract generalized insights:
+    - Derive planning principles that apply to future queries, focusing on the learning objective
+    - Frame conditional insights as "When [condition], [strategy]" to preserve applicability boundaries
+  </Task Instructions>
+
+  <Output Format>
+  Include corresponding tags (e.g., <Experiences>...</Experiences>) as follows to organize the output:
+  ```output
+  <Learning Objective Focus>
+    [Brief description of how to address the learning objective, distinguishing it from the working agent's goal]
+  </Learning Objective Focus>
+
+  <Performance Assessment>
+    - High-Advantage Trajectories: [List with brief justifications based on systems thinking]
+    - Low-Advantage Trajectories: [List with brief justifications]
+  </Performance Assessment>
+
+  <Comparative Analysis>
+    [Directly contrast high- and low-advantage trajectories using the Database Systems Thinking Perspective. Highlight the most critical workflow differences.]
+  </Comparative Analysis>
+
+  <Pattern Identification>
+    [Key elements that led to success, and common pitfalls in workflow planning]
+  </Pattern Identification>
+
+  <Experiences>
+    [Extract AT MOST **{{ num_experiences }}** experiences that could guide future workflow planning of the working agent, focusing on the learning objective. Each experience must be clear, concise, and immediately actionable: format as "Experience name: Brief description." where the name is one or two words and the description is a single focused sentence (≤25 words). No hedging, no redundant context.]
+    1. [experience 1]
+    2. [experience 2]
+    ...
+  </Experiences>
+  ```
+  </Output Format>
+
+SINGLE_QUERY_GROUP_ADVANTAGE_UP: |
+  <Agent Input>
+  {{ question }}
+  </Agent Input>
+
+  <Ground Truth>
+  {{ answer }}
+  </Ground Truth>
+
+  <Trajectories>
+  {{ trajectories }}
+  </Trajectories>
+
+  Follow the requirements to provide your output structured as above.
+
+GROUP_EXPERIENCE_UPDATE_TEMPLATE_SP: |
+  Your ultimate goal is to help improve the working agent's performance by extracting useful experiences from its past trajectories, which should focus on the learning objective and will be used in the future to guide the agent's behavior. The working agent and learning objective are defined as follows:
+  <Working Agent Objective>
+  {{ agent_objective }}
+  </Working Agent Objective>
+  <Learning Objective>
+  {{ learning_objective }}
+  </Learning Objective>
+
+  Now, your task is to perform experience optimization with four possible operations, given existing experiences and newly input experiences derived from recent agent trajectories.
+
+  <Your Input>
+  - Existing Experiences: A list of current experiences in the pool, each with a unique ID and content.
+  - New Experiences: A list of new experiences derived from recent agent trajectories.
+  </Your Input>
+
+  <Task Instructions>
+  1. Focusing on Learning Objective: Always ensure that any update should focus on the learning objective for improving the working agent.
+
+  2. Valid operations: You can perform four operations on the existing experience pool. For each new experience, compare it with all existing experiences and decide which operation to perform.
+
+  - ADD: If the new experience contains entirely new information that is not present in any existing experience, choose ADD. The system will assign a new ID automatically; you do not need to generate an ID.
+
+  - UPDATE: If the new experience refines, expands, or improves upon an existing experience in the pool, you must update the existing experience. Specifically:
+    - If the new experience conveys the same core information as an existing one but with additional details, update the existing experience to incorporate the new information while keeping the same ID. Synthesize the best aspects to create a more comprehensive but high-level version.
+    - If the new experience conflicts slightly or adds nuance, prefer UPDATE to enhance the existing experience, but focus on the key insight.
+    - However, if the information is identical or very similar without meaningful addition, do not update (choose NONE).
+
+  - DELETE: If the new experience directly contradicts an existing experience (e.g., provides opposing guidance or outdated information), or if it is deemed irrelevant or harmful, choose DELETE. You must specify the ID of the existing experience to delete.
+
+  - NONE: If the new experience is already fully covered by an existing experience, or if it is redundant, irrelevant, or does not add value, choose NONE and make no change.
+
+  3. The experience should be formatted as "Experience name: Brief description." where the name is a concise phrase (one or two words) and the description is a single, focused sentence (≤25 words) that directly captures the actionable insight. Avoid vague language, hedging, and redundant context — the agent must be able to apply it immediately at inference time.
+
+  <Output Requirements>
+  You MUST output a single, well-formed JSON array. Each element in the array is a JSON object representing the decision for one new experience.
+  Each decision object MUST have the following structure:
+
+  ```json
+  {
+    "operation": "ADD | UPDATE | DELETE | NONE",
+    "id": "existing_experience_id_or_null",
+    "content": "Experience name: Brief description."
+  }
+  ```
+
+  Produce one object per new experience listed above. The array length must match the number of new experiences in the input.
+  IMPORTANT: At least one object in the array MUST have operation "ADD", "UPDATE", or "DELETE". Returning all "NONE" is not acceptable — every batch of new experiences contains at least one insight worth acting on.
+  </Output Requirements>
+
+GROUP_EXPERIENCE_UPDATE_TEMPLATE_UP: |
+  <Existing Experiences>
+  {{ existing_experiences }}
+  </Existing Experiences>
+
+  <New Experiences>
+  {{ new_experiences }}
+  </New Experiences>
+
+  Follow the requirements to provide your output structured as above.
+
+BATCH_EXPERIENCE_UPDATE_TEMPLATE_SP: |
+  Your ultimate goal is to help improve the working agent's performance by extracting useful experiences from its past trajectories, which should focus on the learning objective and will be used in the future to guide the agent's behavior. The working agent and learning objective are defined as follows:
+  <Working Agent Objective>
+  {{ agent_objective }}
+  </Working Agent Objective>
+  <Learning Objective>
+  {{ learning_objective }}
+  </Learning Objective>
+
+  Now, your task is to merge and apply a batch of experience update operations derived from working agent trajectories.
+
+  <Your Input>
+  - Existing Experiences with related operations: A list of current experiences in the pool, each with a unique ID and content, including the corresponding candidate update operations from a batch of samples.
+  - Pending ADD operations: New experiences proposed for addition that do not reference any existing ID. Check these against the existing pool to avoid semantic duplicates before adding.
+  </Your Input>
+
+  Instead of processing each new experience individually, you will receive a list of proposed update operations (each with operation type, ID if applicable, and content) from a batch of samples. Your goal is to combine and reconcile these operations into a consolidated set of updates to apply to the experience pool.
+
+  <Task Instructions>
+  1. Focusing on Learning Objective: Always ensure that any update should focus on the learning objective for improving the working agent.
+
+  2. Valid operations: You can perform four operations:
+  - ADD: Add a new experience to the pool.
+  - UPDATE: Update an existing experience in the pool.
+  - DELETE: Delete an existing experience from the pool.
+  - NONE: Make no change to the pool.
+
+  3. Combining Operations: You must analyze the batch of operations and produce a final list of decisions that represents the net effect of the batch.
+    - For each existing experience ID, consider all proposed operations that reference that ID (UPDATE or DELETE).
+    - If there are multiple UPDATE operations for the same ID, synthesize them into a single UPDATE that extracts the core insight or common theme. Avoid simply concatenating details; instead, focus on creating a useful principle that contributes to the learning objective.
+    - If there is a DELETE operation for an ID, it overrides any UPDATE operations for that ID; so the net operation should be DELETE. DELETE takes precedence because it indicates the experience is invalid or outdated.
+    - If multiple ADD operations have similar or identical content, merge them into one ADD to avoid duplicates. When merging, ensure the resulting experience captures the essential insight without redundant details. If they are distinct and provide unique insights, keep them as separate ADD operations. Always ensure each added experience is applicable towards the learning objective.
+    - Handle conflicts: If operations conflict, resolve them by considering the context, reliability, and specificity of their content. Prioritize insights that are most applicable towards the learning objective.
+
+  4. Experience format: Every ADD or UPDATE content must follow "Experience name: Brief description." — the name is a concise phrase (one or two words) and the description is a single, focused sentence (≤25 words). Avoid vague language, hedging, and redundant context; the agent must be able to apply it immediately at inference time.
+
+  <Output Requirements>
+  You MUST output a single, well-formed JSON array. Each element in the array is a JSON object representing a final consolidated operation.
+  Each decision object MUST have the following structure:
+
+  ```json
+  {
+    "operation": "ADD | UPDATE | DELETE | NONE",
+    "id": "existing_experience_id_or_null",
+    "content": "Experience name: Brief description."
+  }
+  ```
+  </Output Requirements>
+
+BATCH_EXPERIENCE_UPDATE_TEMPLATE_UP: |
+  <Experiences and Proposed Operations>
+  {{ experiences_and_operations }}
+  </Experiences and Proposed Operations>
+
+  <Pending ADD Operations>
+  {{ pending_add_operations }}
+  </Pending ADD Operations>
+
+  Follow the requirements to provide your output structured as above.
+
+# ---------------------------------------------------------------------------
+# DB-specific distillation prompts.
+# Used by DbSpecificExperienceUpdater in ablation_per_db/experience_updater.py.
+# Differences from the standard GRPO prompts:
+#   - Stage 1 summary: asks for a DB-specific observations section that names
+#     exact columns, notes null/type patterns, and flags schema quirks seen in
+#     the trajectory.
+#   - Stage 2 group advantage: explicitly scoped to one database; the LLM is
+#     told it MAY reference exact table/column names, known data issues, and
+#     other database-specific details because these experiences will ONLY be
+#     shown when querying this particular database.
+# ---------------------------------------------------------------------------
+
+DB_SPECIFIC_ROLLOUT_SUMMARY_SP: |
+  You are a database-query-optimizer analyst. Your job is to read a single agent
+  trajectory for a query against the database **{{ db_key }}** and produce a
+  COMPACT, structured digest that will later be compared against 4-5 other
+  attempts at the same query to extract workflow-planning lessons.
+
+  Because all attempts in this comparison target the same database, your digest
+  should highlight database-specific observations (exact column names, schema
+  quirks, null/type patterns) that explain the outcome — not just generic
+  workflow patterns.
+
+  The working agent and learning objective are:
+  <Working Agent Objective>
+  {{ agent_objective }}
+  </Working Agent Objective>
+  <Learning Objective>
+  {{ learning_objective }}
+  </Learning Objective>
+
+  <Output Format>
+  Write exactly these six sections. Be brief — each section must fit in the space
+  shown. Do NOT add extra commentary outside these sections.
+
+  Strategy: [1-2 sentences: what high-level plan did the agent choose?]
+
+  Key Steps:
+  - [tool(brief_params) → result_summary | rows_in→rows_out | LLM tokens if applicable | ERROR if failed]
+  - (one bullet per significant MCP tool call; skip trivial schema lookups unless they reveal something)
+
+  Outcome: [1 sentence: what did the agent produce and was it correct?]
+
+  Efficiency: [steps=N, llmop_tokens=N, num_steps=N; note any clear waste or savings]
+
+  DB-Specific Observations: [1-3 bullets: schema quirks, column name pitfalls, null/type
+    patterns, join key issues, or data-quality surprises specific to {{ db_key }} that
+    affected this attempt. Name exact tables and columns.]
+
+  Root Cause: [1 sentence: the primary reason this attempt scored advantage={{ advantage }} —
+               what decision, or what schema/data property of {{ db_key }}, drove success
+               or failure relative to other attempts?]
+  </Output Format>
+
+  <Language>
+  Use the same language as the input trajectory.
+  </Language>
+
+DB_SPECIFIC_ROLLOUT_SUMMARY_UP: |
+  <Database>
+  {{ db_key }}
+  </Database>
+
+  <Working Agent Input>
+  {{ question }}
+  </Working Agent Input>
+
+  <Ground Truth>
+  {{ answer }}
+  </Ground Truth>
+
+  <Agent Output (first 5 rows)>
+  {{ agent_output }}
+  </Agent Output (first 5 rows)>
+
+  <Scores>
+  Performance reward: {{ perf_reward }}  |  Advantage: {{ advantage }}
+  (Advantage is group-normalised: positive = above average for this query, negative = below)
+  </Scores>
+
+  <Critique>
+  {{ critique }}
+  </Critique>
+
+  <Execution Profile and Trajectory>
+  The Execution Profile is a compact list of every MCP tool call in this trajectory.
+  Each entry shows: tool name, wall-clock duration (ms), operation context (truncated SQL /
+  relation name / question), cardinality (rows in / rows out), result sample (column names
+  and up to 2 data rows for SQL-returning ops), and LLM tokens (input / output, only for
+  LLM operators). Fields are omitted when not applicable.
+
+  {{ trajectory }}
+  </Execution Profile and Trajectory>
+
+  Follow the output format above.
+
+DB_SPECIFIC_GROUP_ADVANTAGE_SP: |
+  Your ultimate goal is to help improve the working agent's performance on the database
+  **{{ db_key }}** by extracting experiences from its past trajectories. These experiences
+  will be stored in a database-specific pool and shown to the agent **only** when it
+  queries **{{ db_key }}** — they will never be used for other databases.
+
+  Because the experiences are scoped to a single database, they should be as
+  specific as useful: they may reference exact table names, column names, known
+  null/missing-value patterns, type coercion pitfalls, join key conventions, or
+  any other data-quality property unique to {{ db_key }}.  Generic principles are
+  fine when they genuinely apply, but prefer concrete, actionable guidance that
+  exploits what is known about this particular database's schema and data.
+
+  The working agent and learning objective are:
+  <Working Agent Objective>
+  {{ agent_objective }}
+  </Working Agent Objective>
+  <Learning Objective>
+  {{ learning_objective }}
+  </Learning Objective>
+
+  Your task is to review the agent's performance across multiple trajectories for
+  the same query against {{ db_key }}, and extract high-level experiences that can
+  guide future behavior on this database.
+
+  <Your Input>
+  - Agent Input: The specific input task. Each trajectory carries three group-relative
+    scores: **Advantage** (combined headline), **Correctness** (accuracy relative to
+    group average), **Efficiency** (token/step cost relative to group average).
+  - Ground Truth (Optional): The correct answer to the agent input.
+  - Trajectories: Compact summaries of multiple attempts, each with its advantage score
+    and a DB-Specific Observations section noting schema/data details from {{ db_key }}.
+  </Your Input>
+
+  <Database-Aware Systems Thinking Perspective>
+  When comparing trajectories, use these lenses:
+
+  1. Schema Exploitation: Which trajectories correctly used the actual column/table names
+     of {{ db_key }}? Which ones hallucinated column names or assumed wrong types?
+  2. Data Quality Handling: How did each trajectory handle nulls, type mismatches, or
+     sparse columns known to exist in {{ db_key }}?
+  3. Cardinality Control: Which trajectories filtered early using the indexed or
+     selective columns of {{ db_key }} before expensive operations?
+  4. Join & Key Awareness: Were the correct join keys used? Were any implicit foreign-key
+     relationships in {{ db_key }} exploited or missed?
+  5. Operator Selection: Given {{ db_key }}'s schema, did the trajectory choose the right
+     mix of SQL vs. LLM operators, and in the right order?
+  </Database-Aware Systems Thinking Perspective>
+
+  <Task Instructions>
+  1. Evaluate each trajectory against the ground truth and the learning objective:
+     - Identify which trajectories are better (higher advantage) and which are worse.
+     - Analyse workflow differences through the Database-Aware Systems Thinking Perspective,
+       paying close attention to how each trajectory interacted with {{ db_key }}'s schema.
+
+  2. For low-advantage trajectories:
+     - Diagnose root causes specific to {{ db_key }}: e.g., wrong column reference,
+       missed null-handling for a sparse column, incorrect join key, wrong aggregation scope.
+     - Extract the specific failure pattern, naming the relevant table/column.
+
+  3. For high-advantage trajectories:
+     - Identify what schema knowledge or data-awareness made the approach work.
+     - Document the key decisions so the agent can repeat them for future queries on {{ db_key }}.
+
+  4. Extract database-specific insights:
+     - Derive planning principles anchored to {{ db_key }}'s schema and data properties.
+     - Frame conditional insights as "When querying [table/column] in {{ db_key }}, [strategy]".
+     - It is acceptable — and encouraged — to name exact columns, tables, or known data patterns.
+  </Task Instructions>
+
+  <Output Format>
+  Include corresponding tags as follows to organize the output:
+  ```output
+  <Learning Objective Focus>
+    [Brief description of how to address the learning objective for {{ db_key }},
+     distinguishing it from generic agent behavior]
+  </Learning Objective Focus>
+
+  <Performance Assessment>
+    - High-Advantage Trajectories: [List with brief justifications using DB-Aware Systems
+      Thinking; reference specific schema elements where relevant]
+    - Low-Advantage Trajectories: [List with brief justifications]
+  </Performance Assessment>
+
+  <Comparative Analysis>
+    [Directly contrast high- and low-advantage trajectories, highlighting how schema
+     knowledge or ignorance of {{ db_key }}'s data properties drove the difference.]
+  </Comparative Analysis>
+
+  <Pattern Identification>
+    [Key schema-aware patterns that led to success, and DB-specific pitfalls to avoid]
+  </Pattern Identification>
+
+  <Experiences>
+    [Extract AT MOST **{{ num_experiences }}** experiences specific to the database
+     **{{ db_key }}**. Each experience must be immediately actionable: format as
+     "Experience name: Brief description." where the name is one or two words and the
+     description is a single focused sentence (≤30 words). You MAY reference exact
+     table/column names from {{ db_key }}. No hedging, no redundant context.]
+    1. [experience 1]
+    2. [experience 2]
+    ...
+  </Experiences>
+  ```
+  </Output Format>
+
+DB_SPECIFIC_GROUP_ADVANTAGE_UP: |
+  <Database>
+  {{ db_key }}
+  </Database>
+
+  <Agent Input>
+  {{ question }}
+  </Agent Input>
+
+  <Ground Truth>
+  {{ answer }}
+  </Ground Truth>
+
+  <Trajectories>
+  {{ trajectories }}
+  </Trajectories>
+
+  Follow the requirements to provide your output structured as above.
+
+# ---------------------------------------------------------------------------
+# Independent-rollout ablation prompts (no group-relative comparison).
+# Used by IndependentExperienceUpdater in ablation_ungrouped/experience_updater.py.
+# ---------------------------------------------------------------------------
+
+INDEP_ROLLOUT_SUMMARY_TEMPLATE_SP: |
+  You are a database-query-optimizer analyst. Your job is to read a single agent
+  trajectory and produce a COMPACT, structured digest that captures what worked
+  and what failed so that actionable lessons can be extracted from it.
+
+  The working agent and learning objective are:
+  <Working Agent Objective>
+  {{ agent_objective }}
+  </Working Agent Objective>
+  <Learning Objective>
+  {{ learning_objective }}
+  </Learning Objective>
+
+  <Output Format>
+  Write exactly these five sections. Be brief — each section must fit in the space
+  shown. Do NOT add extra commentary outside these sections.
+
+  Strategy: [1-2 sentences: what high-level plan did the agent choose?]
+
+  Key Steps:
+  - [tool(brief_params) → result_summary | rows_in→rows_out | LLM tokens if applicable | ERROR if failed]
+  - (one bullet per significant MCP tool call; skip trivial schema lookups unless they reveal something)
+
+  Outcome: [1 sentence: what did the agent produce and was it correct?]
+
+  Efficiency: [steps={{ num_steps }}, llmop_tokens={{ llmop_tokens }}, score={{ final_reward }}; note any clear waste or savings]
+
+  Root Cause: [1 sentence: the primary reason this attempt scored {{ final_reward }} —
+               what single decision most determined whether it succeeded or failed?]
+  </Output Format>
+
+  <Language>
+  Use the same language as the input trajectory.
+  </Language>
+
+INDEP_ROLLOUT_SUMMARY_TEMPLATE_UP: |
+  <Working Agent Input>
+  {{ question }}
+  </Working Agent Input>
+
+  <Ground Truth>
+  {{ answer }}
+  </Ground Truth>
+
+  <Agent Output (first 5 rows)>
+  {{ agent_output }}
+  </Agent Output (first 5 rows)>
+
+  <Scores>
+  Performance reward: {{ perf_reward }}  |  Combined score (perf − cost): {{ final_reward }}
+  LLM-op tokens: {{ llmop_tokens }}  |  Tool-call steps: {{ num_steps }}
+  (Score is absolute; higher = more correct and/or more efficient)
+  </Scores>
+
+  <Critique>
+  {{ critique }}
+  </Critique>
+
+  <Execution Profile and Trajectory>
+  The Execution Profile is a compact list of every MCP tool call in this trajectory.
+  Each entry shows: tool name, wall-clock duration (ms), operation context (truncated SQL /
+  relation name / question), cardinality (rows in / rows out), result sample (column names
+  and up to 2 data rows for SQL-returning ops), and LLM tokens (input / output, only for
+  LLM operators). Fields are omitted when not applicable.
+
+  {{ trajectory }}
+  </Execution Profile and Trajectory>
+
+  Follow the output format above.
+
+INDEP_SINGLE_ROLLOUT_DISTILL_SP: |
+  Your ultimate goal is to help improve the working agent's performance by extracting
+  useful experiences from its past trajectory, which should focus on the learning
+  objective and will be used in the future to guide the agent's behavior.
+  The working agent and learning objective are defined as follows:
+  <Working Agent Objective>
+  {{ agent_objective }}
+  </Working Agent Objective>
+  <Learning Objective>
+  {{ learning_objective }}
+  </Learning Objective>
+
+  Your task is to review a single agent trajectory and extract high-level experiences
+  that can guide future behavior aligned with the learning objective.
+
+  <Your Input>
+  - Agent Input: The specific input task given to the working agent.
+  - Ground Truth (Optional): If available, the ground truth answer to the agent input.
+  - Trajectory: A compact summary of one attempt by the agent, labeled with its absolute
+    performance score (perf reward) and cost metrics (LLM-op tokens, tool-call steps).
+    The combined score is perf − cost_penalty; higher is better.
+  </Your Input>
+
+  <Database Systems Thinking Perspective>
+  Use these lenses to identify why this attempt succeeded or fell short:
+
+  1. Data Volume & Cardinality Control: Did the agent narrow the problem size before
+     applying expensive operations?
+  2. Cost-Benefit Tradeoffs: Did it favor cheaper SQL/schema ops over premature LLM
+     inference?
+  3. Execution Plan Robustness: How did it handle schema ambiguity or data noise?
+  4. Tool Sequencing: Was the ordering of operations logical and efficient?
+  5. Convergence Speed: Did it reach the answer with targeted, minimal tool calls?
+  </Database Systems Thinking Perspective>
+
+  <Task Instructions>
+  1. Evaluate the trajectory against the ground truth (if available) and the learning
+     objective.
+
+  2. If the attempt succeeded (high score):
+     - Identify the key decisions and tool-sequencing choices that drove correctness
+       and efficiency.
+     - Extract what specifically worked well so the agent can repeat it.
+
+  3. If the attempt failed or was partially correct (low score):
+     - Diagnose the root cause — e.g., wrong operator choice, unnecessary data volume,
+       schema misreading, or premature aggregation.
+     - Extract the failure pattern so the agent can avoid it.
+
+  4. Extract generalized insights:
+     - Derive planning principles applicable to future queries.
+     - Frame conditional insights as "When [condition], [strategy]" to preserve
+       applicability boundaries.
+  </Task Instructions>
+
+  <Output Format>
+  Include corresponding tags as follows to organize the output:
+  ```output
+  <Learning Objective Focus>
+    [Brief description of how this trajectory relates to the learning objective]
+  </Learning Objective Focus>
+
+  <Performance Assessment>
+    [1-2 sentences: was this attempt correct? efficient? what was the key outcome?]
+  </Performance Assessment>
+
+  <Root Cause Analysis>
+    [What single decision most determined the outcome? What should the agent do
+     differently (or keep doing) next time?]
+  </Root Cause Analysis>
+
+  <Pattern Identification>
+    [Any reusable workflow pattern — positive or negative — worth recording]
+  </Pattern Identification>
+
+  <Experiences>
+    [Extract AT MOST **{{ num_experiences }}** experiences that could guide future workflow
+     planning of the working agent. Each experience must be clear, concise, and immediately
+     actionable: format as "Experience name: Brief description." where the name is one or
+     two words and the description is a single focused sentence (≤25 words).
+     No hedging, no redundant context.]
+    1. [experience 1]
+    2. [experience 2]
+    ...
+  </Experiences>
+  ```
+  </Output Format>
+
+INDEP_SINGLE_ROLLOUT_DISTILL_UP: |
+  <Agent Input>
+  {{ question }}
+  </Agent Input>
+
+  <Ground Truth>
+  {{ answer }}
+  </Ground Truth>
+
+  <Trajectory>
+  {{ trajectory }}
+
+  {{ score_label }}
+  </Trajectory>
+
+  Follow the requirements to provide your output structured as above.

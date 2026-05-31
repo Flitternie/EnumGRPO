@@ -1,0 +1,38 @@
+{
+    "table_name": "superhero.colour",
+    "table_fullname": "superhero.superhero.colour",
+    "column_names": [
+        "id",
+        "colour"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "id": 1,
+            "colour": "No Colour"
+        },
+        {
+            "id": 2,
+            "colour": "Amber"
+        },
+        {
+            "id": 3,
+            "colour": "Auburn"
+        },
+        {
+            "id": 4,
+            "colour": "Black"
+        },
+        {
+            "id": 5,
+            "colour": "Black/Blue"
+        }
+    ]
+}

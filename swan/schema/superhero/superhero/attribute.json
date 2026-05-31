@@ -1,0 +1,38 @@
+{
+    "table_name": "superhero.attribute",
+    "table_fullname": "superhero.superhero.attribute",
+    "column_names": [
+        "id",
+        "attribute_name"
+    ],
+    "column_types": [
+        "NUMBER",
+        "TEXT"
+    ],
+    "description": [
+        null,
+        null
+    ],
+    "sample_rows": [
+        {
+            "id": 1,
+            "attribute_name": "Intelligence"
+        },
+        {
+            "id": 2,
+            "attribute_name": "Strength"
+        },
+        {
+            "id": 3,
+            "attribute_name": "Speed"
+        },
+        {
+            "id": 4,
+            "attribute_name": "Durability"
+        },
+        {
+            "id": 5,
+            "attribute_name": "Power"
+        }
+    ]
+}
