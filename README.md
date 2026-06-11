@@ -1,6 +1,6 @@
 # EnumGRPO
 
-This repository implements **EnumGRPO**, the optimizer from *Cost-Aware Optimization for Agentic Query Execution*. The project studies database agents that interleave SQL execution with LLM-backed semantic operators, where planning choices affect both answer quality and LLM cost.
+This repository implements **EnumGRPO**, the optimizer from paper [*Cost-Aware Optimization for Agentic Query Execution*](https://arxiv.org/pdf/2606.03152). The project studies database agents that interleave SQL execution with LLM-backed semantic operators, where planning choices affect both answer quality and LLM cost.
 
 EnumGRPO improves an agent through in-context reinforcement learning: during a learning stage it enumerates diverse workflow strategies, executes multiple rollouts per query, scores quality and cost, and distills the contrastive feedback into reusable planning heuristics.
 
