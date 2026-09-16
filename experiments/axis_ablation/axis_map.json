@@ -1,0 +1,51 @@
+{
+  "description": "Manual primary-axis assignment for the 32 experiences in exp/learning/main/experiences/latest.json.",
+  "axes": {
+    "D": "execution_paradigm",
+    "A": "operator_type",
+    "B": "operator_placement",
+    "C": "selectivity_scope",
+    "F": "projection_width"
+  },
+  "expected_counts": {
+    "D": 9,
+    "A": 3,
+    "B": 6,
+    "C": 8,
+    "F": 6
+  },
+  "mapping": {
+    "G0":  {"axis": "D", "value": "code_driven"},
+    "G1":  {"axis": "D", "value": "code_driven"},
+    "G2":  {"axis": "C", "value": "targeted"},
+    "G3":  {"axis": "C", "value": "targeted"},
+    "G4":  {"axis": "B", "value": "pre_agg"},
+    "G5":  {"axis": "D", "value": "code_driven"},
+    "G6":  {"axis": "D", "value": "code_driven"},
+    "G7":  {"axis": "B", "value": "post_agg"},
+    "G8":  {"axis": "D", "value": "data_driven"},
+    "G9":  {"axis": "B", "value": "pre_agg"},
+    "G10": {"axis": "C", "value": "targeted"},
+    "G11": {"axis": "A", "value": "reduce"},
+    "G12": {"axis": "B", "value": "post_agg"},
+    "G13": {"axis": "C", "value": "full"},
+    "G14": {"axis": "C", "value": "full"},
+    "G15": {"axis": "F", "value": "wide"},
+    "G16": {"axis": "F", "value": "narrow"},
+    "G17": {"axis": "D", "value": "code_driven"},
+    "G18": {"axis": "D", "value": "code_driven"},
+    "G19": {"axis": "F", "value": "wide"},
+    "G20": {"axis": "D", "value": "code_driven"},
+    "G21": {"axis": "B", "value": "pre_agg"},
+    "G22": {"axis": "D", "value": "data_driven"},
+    "G23": {"axis": "A", "value": "reduce"},
+    "G24": {"axis": "C", "value": "targeted"},
+    "G25": {"axis": "B", "value": "post_agg"},
+    "G26": {"axis": "F", "value": "narrow"},
+    "G27": {"axis": "F", "value": "wide"},
+    "G28": {"axis": "C", "value": "targeted"},
+    "G29": {"axis": "F", "value": "narrow"},
+    "G30": {"axis": "C", "value": "full"},
+    "G31": {"axis": "A", "value": "reduce"}
+  }
+}
