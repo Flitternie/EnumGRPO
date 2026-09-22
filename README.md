@@ -19,14 +19,13 @@ Each learning batch runs `grpo_n` rollouts per query, seeded with different axis
 ## Repository Layout
 
 - `agent/`: DB agent runtime and prompts.
-- `baseline/`: agentic Text2SQL and BlendSQL baselines.
+- `baseline/`: Agentic Text2SQL, BlendSQL, LOTUS, and Palimpzest baselines.
 - `learning/`: EnumGRPO learning loop, reward scoring, and rollout management.
 - `experiments/`: reproducible launchers and configurations for the primary
   experiment, transfer studies, and revision baselines.
 - `artifacts/experiences/`: frozen experience pools used by the reported
   EnumGRPO, Vanilla GRPO, and Reflexion evaluations.
 - `swan/`: SWAN JSONL data and evaluation helpers.
-- `scalability/`: database scaling and scalability sweep scripts.
 - `tools/`: MCP database tools such as SQL execution, relation inspection, and LLM operators.
 - `run_multi_eval.sh`: repeated main evaluation across baselines and learned agent.
 
@@ -123,6 +122,11 @@ python run_swan_agentic_blendsql.py --query_file swan/evaluation.jsonl --out_dir
 python run_swan_main.py --query_file swan/evaluation.jsonl --out_dir exp/db_agent_eval
 ```
 
+The revision also includes oracle-assisted LOTUS and Palimpzest baselines.
+Their adapters, pinned upstream revisions, and committed fixed programs are
+documented in `baseline/lotus/` and `baseline/palimpzest/`; three-run launchers
+are provided under `experiments/lotus/` and `experiments/palimpzest/`.
+
 Score any run directory with:
 
 ```bash
@@ -146,7 +150,7 @@ Use `--skip-training` to evaluate existing fold-specific pools or
 Scale the SWAN databases and evaluate agents across scale factors:
 
 ```bash
-bash scalability/run_scalability_sweep.sh \
+bash experiments/scalability/run_scalability_sweep.sh \
   -q swan/evaluation.jsonl \
   -e artifacts/experiences/swan_enumgrpo.json \
   -k 1

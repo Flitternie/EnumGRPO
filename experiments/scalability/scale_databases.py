@@ -20,7 +20,7 @@ Two regimes:
       Aggregation ground truth is preserved in expectation (same distribution).
 
 Usage:
-    python scalability/scale_databases.py [OPTIONS]
+    python experiments/scalability/scale_databases.py [OPTIONS]
 
 Options:
     --db_dir DIR        Source DuckDB directory  (default: swan/database)

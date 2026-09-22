@@ -4,18 +4,18 @@
 # and accuracy change as table size grows.
 #
 # Usage:
-#   bash scalability/run_scalability_sweep.sh [OPTIONS]
+#   bash experiments/scalability/run_scalability_sweep.sh [OPTIONS]
 #
 # Options:
 #   -o OUTPUT_DIR       Root dir for all outputs     (default: exp/scalability_<timestamp>)
 #   -q QUERY_FILE       SWAN query JSONL              (default: swan/evaluation.jsonl)
 #   -e EXPERIENCES      Experiences JSON for db_agent_lx
-#                                                    (default: exp/learning/haiku/experiences/latest.json)
+#                                                    (default: artifacts/experiences/swan_enumgrpo.json)
 #   -m METHODS          Comma-separated agent methods to run
 #                       Choices: text2sql,blendsql,db_agent,db_agent_lx,db_agent_nolimit
 #                                                    (default: all four)
 #   -s SCALES           Comma-separated scale factors, e.g. "0.25,0.5,1.0,2.0,4.0"
-#                       Overrides per-db defaults in scalability/scale_databases.py
+#                       Overrides per-db defaults in experiments/scalability/scale_databases.py
 #   --db DB_ID          Only scale/run this database (repeatable)
 #   --seed SEED         Determinism seed for scaling (default: 42)
 #   --skip-scale        Skip DB scaling; reuse existing scaled DBs under -o/scaled_dbs
@@ -41,7 +41,7 @@
 #
 # Output layout:
 #   <OUTPUT_DIR>/
-#     scaled_dbs/                       # produced by scalability/scale_databases.py
+#     scaled_dbs/                       # produced by experiments/scalability/scale_databases.py
 #       <scale_label>/
 #         <db_id>.duckdb
 #       scale_manifest.json
@@ -60,7 +60,7 @@ set -euo pipefail
 # ---------------------------------------------------------------------------
 # Environment setup
 # ---------------------------------------------------------------------------
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 # Source .env so bash-level env vars (QUERY_TIMEOUT_S, LLMOP_TIMEOUT_S, …)
 # are available for timeout scaling -- Python scripts load it via dotenv,
@@ -91,10 +91,10 @@ fi
 K=1
 OUTPUT_DIR=""
 QUERY_FILE="swan/evaluation.jsonl"
-EXPERIENCES_FILE="exp/learning/haiku/experiences/latest.json"
+EXPERIENCES_FILE="artifacts/experiences/swan_enumgrpo.json"
 METHODS_ARG=""        # empty = all four
-SCALES_ARG=""         # empty = use per-db defaults from scalability/scale_databases.py
-DB_FILTER_ARGS=()     # --db flags forwarded to scalability/scale_databases.py
+SCALES_ARG=""         # empty = use defaults from experiments/scalability/scale_databases.py
+DB_FILTER_ARGS=()     # --db flags forwarded to experiments/scalability/scale_databases.py
 SEED=42
 SKIP_SCALE=0
 SKIP_RUNS=0
@@ -236,7 +236,7 @@ fi
 if [[ "$SKIP_SCALE" -eq 0 ]]; then
     log "=== Scaling databases ==="
 
-    SCALE_CMD=( "$PYTHON" "${REPO_ROOT}/scalability/scale_databases.py"
+    SCALE_CMD=( "$PYTHON" "${REPO_ROOT}/experiments/scalability/scale_databases.py"
                 "--out_root"    "$SCALED_DBS_DIR"
                 "--query_file"  "$QUERY_FILE"
                 "--seed"        "$SEED" )

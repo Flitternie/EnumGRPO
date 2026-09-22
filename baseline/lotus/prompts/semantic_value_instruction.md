@@ -1,0 +1,1 @@
+Respond with ONLY the exact answer value - no explanation, no reasoning, no markdown, no preamble, no 'Answer:' prefix. Match the surface form used in the database (e.g. a nationality is the demonym 'German', not 'Germany'; do not add units or extra words).
