@@ -1,5 +1,5 @@
 {
-  "description": "Manual primary-axis assignment for the 32 experiences in exp/learning/main/experiences/latest.json.",
+  "description": "Manual primary-axis assignment for artifacts/experiences/swan_enumgrpo.json.",
   "axes": {
     "D": "execution_paradigm",
     "A": "operator_type",

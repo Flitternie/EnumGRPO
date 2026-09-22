@@ -1,13 +1,13 @@
-"""CLI entrypoint for the independent-rollout distillation ablation.
+"""CLI entrypoint for the Reflexion-style independent-distillation baseline.
 
 This is a drop-in replacement for ``learning.cli`` that uses
-:class:`~learning.ablation_ungrouped.grpo.TrainingFreeIndependent` instead
+:class:`~learning.reflexion.grpo.ReflexionTraining` instead
 of :class:`~learning.enumgrpo.TrainingFreeGRPO`.  All flags, config
 keys, checkpoint / resume logic, and logging behaviour are identical.
 
 Run with:
 
-    python -m learning.ablation_ungrouped.cli --config learning/config.yaml [overrides...]
+    python -m learning.reflexion.cli --config experiments/reflexion/config.yaml [overrides...]
 """
 
 from __future__ import annotations
@@ -24,7 +24,7 @@ load_dotenv()
 
 from ..logging_setup import setup_run_logging
 from ..enumgrpo import TrainingCheckpoint
-from .grpo import TrainingFreeIndependent
+from .grpo import ReflexionTraining
 from ..utils import parse_practice_config
 
 _CHECKPOINT_FILE = "checkpoint.json"
@@ -64,7 +64,6 @@ def _write_checkpoint(run_log_dir: Path, ckpt: TrainingCheckpoint) -> Path:
 
 def main() -> NoReturn:
     cfg = parse_practice_config()
-    cfg.exp_id = cfg.exp_id + "_ablation_ungrouped"
     run_log_dir = setup_run_logging(cfg)
 
     if cfg.practice.restart_step is None and run_log_dir is not None:
@@ -78,7 +77,7 @@ def main() -> NoReturn:
             )
 
     try:
-        tf = TrainingFreeIndependent(cfg, run_log_dir=run_log_dir)
+        tf = ReflexionTraining(cfg, run_log_dir=run_log_dir)
         experiences = asyncio.run(tf.run())
 
     except TrainingCheckpoint as ckpt:
@@ -88,10 +87,10 @@ def main() -> NoReturn:
                 f"\n=== Checkpoint reached (step {ckpt.next_step - 1} completed) ===\n"
                 f"State saved to: {ckpt_file}\n"
                 f"\nTo resume, re-run the same command:\n"
-                f"  python -m learning.ablation_ungrouped.cli --config learning/config.yaml\n"
+                f"  python -m learning.reflexion.cli --config experiments/reflexion/config.yaml\n"
                 f"  (restart_step will be set automatically from checkpoint.json)\n"
                 f"\nOr to resume from a specific step:\n"
-                f"  python -m learning.ablation_ungrouped.cli --config learning/config.yaml "
+                f"  python -m learning.reflexion.cli --config experiments/reflexion/config.yaml "
                 f"--restart_step {ckpt.next_step}",
                 file=sys.__stderr__,
             )

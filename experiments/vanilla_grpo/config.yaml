@@ -1,0 +1,70 @@
+# Vanilla training-free GRPO ablation for the VLDB revision.
+#
+# This intentionally matches learning/config.yaml except for:
+#   1. a dedicated experiment id; and
+#   2. plan_enumeration=false.
+#
+# Consequently, each question still receives five stochastic rollouts and the
+# same group-relative reward/distillation procedure, but no rollout is seeded
+# with an EnumGRPO plan-axis assignment.
+
+experiment:
+  exp_id: vanilla_grpo_swan40_n5_v1
+  system_prompt_path: agent/codebase/prompts/agentic_db_plain.md
+  log_dir: exp/learning
+
+data:
+  practice_path: swan/learning.jsonl
+  eval_path: null
+
+practice:
+  epochs: 1
+  queries_per_update: 2
+  grpo_n: 5
+  rollout_concurrency: 10
+  rollout_temperature: 0.7
+  rollout_data_truncate: null
+  task_timeout: 1800
+  max_retries: 3
+  max_steps_per_rollout: 40
+  mcp_result_max_chars: 4000
+  shuffle_data: true
+
+  restart_step: null
+  checkpoint_every: null
+
+  agent_objective: >
+    A database agent that answers analytical queries over DuckDB databases
+    using SQL and LLM operators for data that requires semantic reasoning or
+    repair.
+  learning_objective: >
+    Discover and refine database-oriented workflow planning strategies that
+    minimize LLM operator token cost while maximizing answer correctness. The
+    goal is to learn how to reason about data cardinality, operator
+    latency/cost tradeoffs, and logical operation sequencing (e.g., filtering
+    before inference, verifying schema before guessing) to achieve efficient
+    and robust query execution.
+  given_ground_truth: true
+  num_experiences_per_query: 3
+  distillation_concurrency: 16
+
+  # The only methodological change from full EnumGRPO.
+  plan_enumeration: false
+  plan_library_path: learning/plan_library.yaml
+
+  do_eval: false
+  eval_strategy: epoch
+  eval_steps: 1
+  eval_data_truncate: null
+
+evaluation:
+  concurrency: 32
+  pass_k: 1
+  verify_module: learning.verify
+  verify_func_name: verify_func
+  reward_w_sr: 0.5
+  reward_w_row: 0.3
+  reward_w_item: 0.2
+  reward_w_cost: 0.2
+  reward_w_token: 0.7
+  reward_w_steps: 0.3

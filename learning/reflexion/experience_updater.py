@@ -1,4 +1,4 @@
-"""Ablation variant of ExperienceUpdater: independent rollout distillation.
+"""Reflexion-style ExperienceUpdater with independent trajectory reflection.
 
 Instead of computing group-relative z-score advantages (GRPO), each rollout is
 treated in isolation.  Stages 3 (per-group experience update) and 4 (batch
@@ -41,7 +41,7 @@ _INDEP_SINGLE_SP_KEY  = "INDEP_SINGLE_ROLLOUT_DISTILL_SP"
 _INDEP_SINGLE_UP_KEY  = "INDEP_SINGLE_ROLLOUT_DISTILL_UP"
 
 
-class IndependentExperienceUpdater(ExperienceUpdater):
+class ReflexionExperienceUpdater(ExperienceUpdater):
     """GRPO-free experience updater: distills each rollout independently.
 
     Rollouts are still batched and run concurrently, but the advantage signal

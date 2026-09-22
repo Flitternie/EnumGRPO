@@ -279,7 +279,7 @@ BATCH_EXPERIENCE_UPDATE_TEMPLATE_UP: |
 
 # ---------------------------------------------------------------------------
 # DB-specific distillation prompts.
-# Used by DbSpecificExperienceUpdater in ablation_per_db/experience_updater.py.
+# Used by DbSpecificExperienceUpdater in learning/per_db/experience_updater.py.
 # Differences from the standard GRPO prompts:
 #   - Stage 1 summary: asks for a DB-specific observations section that names
 #     exact columns, notes null/type patterns, and flags schema quirks seen in
@@ -501,7 +501,7 @@ DB_SPECIFIC_GROUP_ADVANTAGE_UP: |
 
 # ---------------------------------------------------------------------------
 # Independent-rollout ablation prompts (no group-relative comparison).
-# Used by IndependentExperienceUpdater in ablation_ungrouped/experience_updater.py.
+# Used by ReflexionExperienceUpdater in learning/reflexion/experience_updater.py.
 # ---------------------------------------------------------------------------
 
 INDEP_ROLLOUT_SUMMARY_TEMPLATE_SP: |

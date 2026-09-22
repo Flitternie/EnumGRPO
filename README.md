@@ -21,11 +21,19 @@ Each learning batch runs `grpo_n` rollouts per query, seeded with different axis
 - `agent/`: DB agent runtime and prompts.
 - `baseline/`: agentic Text2SQL and BlendSQL baselines.
 - `learning/`: EnumGRPO learning loop, reward scoring, and rollout management.
+- `experiments/`: reproducible launchers and configurations for the primary
+  experiment, transfer studies, and revision baselines.
+- `artifacts/experiences/`: frozen experience pools used by the reported
+  EnumGRPO, Vanilla GRPO, and Reflexion evaluations.
 - `swan/`: SWAN JSONL data and evaluation helpers.
 - `scalability/`: database scaling and scalability sweep scripts.
 - `tools/`: MCP database tools such as SQL execution, relation inspection, and LLM operators.
 - `run_multi_eval.sh`: repeated main evaluation across baselines and learned agent.
-- `run_heldout.sh`: held-out database learning and evaluation workflow.
+
+The canonical experiment names used throughout the repository are
+`enumgrpo`, `vanilla_grpo`, and `reflexion`. The paper's cross-database
+transfer setup lives in `experiments/cross_db/`; `learning/per_db/` is a
+separate implementation that maintains one experience pool per database.
 
 ## Setup
 
@@ -77,10 +85,10 @@ python swan/preprocess.py
 
 ## Learning
 
-Run the default EnumGRPO learning loop:
+Run the primary EnumGRPO learning setup:
 
 ```bash
-python -m learning.cli --config learning/config.yaml
+sbatch experiments/primary/train.sbatch
 ```
 
 The default config writes results under `exp/learning/<exp_id>/<timestamp>/`. The main learned prompt artifacts are written in that run directory, with latest experience files under `exp/learning/<exp_id>/experiences/`.
@@ -102,7 +110,7 @@ Run repeated evaluation of a learned agent prompt:
 ```bash
 bash run_multi_eval.sh -k 3 \
   -q swan/evaluation.jsonl \
-  -e exp/learning/enumgrpo/experiences/latest.json
+  -e artifacts/experiences/swan_enumgrpo.json
 ```
 
 This script evaluates the learned DB agent prompt against the SWAN evaluation set and aggregates repeated runs under `exp/multi_eval_<timestamp>/`. Use `--skip-runs` to re-aggregate existing `eval_summary.json` files.
@@ -121,15 +129,17 @@ Score any run directory with:
 python eval_swan.py --run_dir exp/db_agent_eval --query_file swan/evaluation.jsonl --json
 ```
 
-## Held-Out DB Evaluation
+## Cross-Database Transfer
 
-`run_heldout.sh` supports train-on-three, evaluate-on-one workflows for the four SWAN databases:
+The cross-database transfer experiment trains on three SWAN databases and
+evaluates on the held-out fourth database:
 
 ```bash
-bash run_heldout.sh -k 3
+bash experiments/cross_db/run.sh
 ```
 
-The script contains commented sections for generating held-out splits and running per-fold learning jobs. Uncomment the split-generation and fold-learning blocks when producing new held-out learned prompts, then run the evaluation section to score each held-out database.
+Use `--skip-training` to evaluate existing fold-specific pools or
+`--skip-evaluation` to produce the pools without running evaluation.
 
 ## Scalability Experiments
 
@@ -138,7 +148,7 @@ Scale the SWAN databases and evaluate agents across scale factors:
 ```bash
 bash scalability/run_scalability_sweep.sh \
   -q swan/evaluation.jsonl \
-  -e exp/learning/enumgrpo/experiences/latest.json \
+  -e artifacts/experiences/swan_enumgrpo.json \
   -k 1
 ```
 

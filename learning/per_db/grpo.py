@@ -6,9 +6,9 @@ underlying GRPO distillation (group-relative z-score advantages, 4-stage
 pipeline) is unchanged; it is simply run once per database partition rather
 than once over the full mixed batch.
 
-New files (nothing existing is modified):
-  learning/ablation_per_db/grpo.py  -- this file
-  learning/ablation_per_db/cli.py   -- CLI entrypoint
+Implementation files:
+  learning/per_db/grpo.py  -- this file
+  learning/per_db/cli.py   -- CLI entrypoint
 
 Design overview
 ---------------
@@ -488,7 +488,7 @@ class DbSpecificTrainingFreeGRPO(TrainingFreeGRPO):
                     step=step, batch_idx=batch_idx, num_batches=num_batches
                 ):
                     _tqdm_write(f"  [step {step}] Running evaluation…")
-                    await self._run_eval_ablation_per_db(epoch=epoch, step=step)
+                    await self._run_eval_per_db(epoch=epoch, step=step)
 
             batch_bar.close()
 
@@ -507,7 +507,7 @@ class DbSpecificTrainingFreeGRPO(TrainingFreeGRPO):
     # Evaluation adapted for db-specific experience injection
     # ------------------------------------------------------------------
 
-    async def _run_eval_ablation_per_db(self, *, epoch: int, step: int) -> None:
+    async def _run_eval_per_db(self, *, epoch: int, step: int) -> None:
         """Evaluation pass using per-db experience injection."""
         assert self.config.data is not None
         from ..data_manager import JsonlDataManager

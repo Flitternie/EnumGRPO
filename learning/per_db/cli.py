@@ -1,13 +1,13 @@
-"""CLI entrypoint for the DB-specific training-free GRPO ablation.
+"""CLI entrypoint for DB-specific experience-pool learning.
 
 Drop-in replacement for ``learning.cli`` that uses
-:class:`~learning.ablation_per_db.grpo.DbSpecificTrainingFreeGRPO`.
+:class:`~learning.per_db.grpo.DbSpecificTrainingFreeGRPO`.
 All flags, config keys, checkpoint/resume logic, and logging behaviour are
 identical to the standard CLI.
 
 Run with:
 
-    python -m learning.ablation_per_db.cli --config learning/config.yaml [overrides...]
+    python -m learning.per_db.cli --config learning/config.yaml [overrides...]
 """
 
 from __future__ import annotations
@@ -64,7 +64,7 @@ def _write_checkpoint(run_log_dir: Path, ckpt: TrainingCheckpoint) -> Path:
 
 def main() -> NoReturn:
     cfg = parse_practice_config()
-    cfg.exp_id = cfg.exp_id + "_ablation_per_db"
+    cfg.exp_id = cfg.exp_id + "_per_db"
     run_log_dir = setup_run_logging(cfg)
 
     if cfg.practice.restart_step is None and run_log_dir is not None:
@@ -88,10 +88,10 @@ def main() -> NoReturn:
                 f"\n=== Checkpoint reached (step {ckpt.next_step - 1} completed) ===\n"
                 f"State saved to: {ckpt_file}\n"
                 f"\nTo resume, re-run the same command:\n"
-                f"  python -m learning.ablation_per_db.cli --config learning/config.yaml\n"
+                f"  python -m learning.per_db.cli --config learning/config.yaml\n"
                 f"  (restart_step will be set automatically from checkpoint.json)\n"
                 f"\nOr to resume from a specific step:\n"
-                f"  python -m learning.ablation_per_db.cli --config learning/config.yaml "
+                f"  python -m learning.per_db.cli --config learning/config.yaml "
                 f"--restart_step {ckpt.next_step}",
                 file=sys.__stderr__,
             )
