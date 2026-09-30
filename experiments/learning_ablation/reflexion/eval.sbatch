@@ -6,11 +6,11 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=96G
 #SBATCH --time=2-00:00:00
-#SBATCH --output=experiments/reflexion/slurm-eval-%j.log
+#SBATCH --output=experiments/learning_ablation/reflexion/slurm-eval-%j.log
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 PYTHON="${PYTHON:-python3}"
 POOL_FILE="${REPO_ROOT}/artifacts/experiences/swan_reflexion.json"
 EVAL_ROOT="${REPO_ROOT}/exp/eval/reflexion_swan40_n5_v1"
@@ -39,7 +39,7 @@ echo "Output: ${EVAL_ROOT}"
 
 LEARNED_AGENT_SLUG="reflexion" \
 PYTHON="${PYTHON}" \
-bash "${REPO_ROOT}/run_multi_eval.sh" \
+bash "${REPO_ROOT}/experiments/primary/run_multi_eval.sh" \
   -k 3 \
   -q "${REPO_ROOT}/swan/evaluation.jsonl" \
   -e "${POOL_FILE}" \

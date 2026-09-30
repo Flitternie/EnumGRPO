@@ -8,7 +8,7 @@ modification.
 
 Usage (same flags as the standard CLI):
 
-    python -m learning.reflexion.cli --config experiments/reflexion/config.yaml [overrides...]
+    python -m learning.reflexion.cli --config experiments/learning_ablation/reflexion/config.yaml [overrides...]
 """
 
 from __future__ import annotations

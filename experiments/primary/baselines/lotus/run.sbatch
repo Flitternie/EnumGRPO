@@ -6,11 +6,11 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=96G
 #SBATCH --time=2-00:00:00
-#SBATCH --output=experiments/lotus/slurm-%j.log
+#SBATCH --output=experiments/primary/baselines/lotus/slurm-%j.log
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../../.." && pwd)"
 PYTHON="${PYTHON:-python3}"
 PROGRAM_FILE="${REPO_ROOT}/baseline/lotus/programs/swan_oracle_efficiency.jsonl"
 OUTPUT_ROOT="${LOTUS_OUTPUT_ROOT:-${REPO_ROOT}/exp/baseline/lotus/oracle_efficiency}"

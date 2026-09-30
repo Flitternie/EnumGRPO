@@ -142,11 +142,11 @@ else
 fi
 
 declare -A AGENT_SCRIPTS
-AGENT_SCRIPTS[text2sql]="run_swan_agentic_text2sql.py"
-AGENT_SCRIPTS[blendsql]="run_swan_agentic_blendsql.py"
-AGENT_SCRIPTS[db_agent]="run_swan_main.py"
-AGENT_SCRIPTS[db_agent_lx]="run_swan_main.py"
-AGENT_SCRIPTS[db_agent_nolimit]="run_swan_main.py"
+AGENT_SCRIPTS[text2sql]="runners/agentic_text2sql.py"
+AGENT_SCRIPTS[blendsql]="runners/agentic_blendsql.py"
+AGENT_SCRIPTS[db_agent]="runners/agent.py"
+AGENT_SCRIPTS[db_agent_lx]="runners/agent.py"
+AGENT_SCRIPTS[db_agent_nolimit]="runners/agent.py"
 
 # Extra CLI args per agent (resolved after OUTPUT_DIR is set)
 _build_agent_extra() {
@@ -307,7 +307,7 @@ except Exception:
         if [[ "$SCALE_TIMEOUT" -eq 1 ]]; then
             BASE_TIMEOUT="${QUERY_TIMEOUT_S:-0}"
             if [[ "$BASE_TIMEOUT" -le 0 ]]; then
-                log "  WARNING: QUERY_TIMEOUT_S not set; cannot scale timeout. Using run_swan_main.py default."
+                log "  WARNING: QUERY_TIMEOUT_S not set; cannot scale timeout. Using runners/agent.py default."
                 TIMEOUT_ARG=""
                 LLMOP_TIMEOUT_ENV=""
             else
@@ -463,7 +463,7 @@ for label in scale_labels:
             llm_c   = costs.get("llm_op", {})
 
             # Infer the timeout that was used for this run from results.jsonl
-            # (run_swan_main.py records elapsed_s per query; we can't recover timeout
+            # (runners/agent.py records elapsed_s per query; we can't recover timeout
             # directly, but we note n_timed_out from missing CSVs + elapsed)
             n_timed_out = summary.get("n_missing_csv", 0)
 

@@ -4,7 +4,7 @@
 The generated file is an agent-facing view of the benchmark.  It does not
 contain gold SQL beyond fields already present in the source JSONL, and the
 runner continues to expose ordinary DuckDB schema inspection.  Relationships
-are appended to ``hint`` because run_swan_main.py already forwards that field;
+are appended to ``hint`` because runners/agent.py already forwards that field;
 no SWAN runner behavior needs to change.
 """
 

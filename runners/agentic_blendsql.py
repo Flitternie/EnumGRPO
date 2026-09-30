@@ -1,11 +1,11 @@
 #!/usr/bin/env python3
-"""Batch runner: BlendSQL agent over swan/swan.jsonl.
+"""Batch runner: BlendSQL agent over the common evaluation JSONL format.
 
 Reads the `query` field (natural language) from each JSONL entry and spawns
-`python baseline/blendsql_agent.py db ...` as a subprocess — the agent
+`python baseline/agentic_blendsql.py db ...` as a subprocess — the agent
 autonomously generates BlendSQL (or pure SQL) to answer the question.
 
-Follows the same pattern as run_swan_main.py.
+Follows the same pattern as ``runners/agent.py``.
 """
 from __future__ import annotations
 
@@ -17,10 +17,14 @@ from concurrent.futures import ProcessPoolExecutor, as_completed
 from pathlib import Path
 from typing import Dict, List, Optional
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 try:
     from dotenv import load_dotenv  # type: ignore
 
-    load_dotenv(Path(__file__).resolve().parent / ".env", override=False)
+    load_dotenv(REPO_ROOT / ".env", override=False)
 except Exception:
     pass
 
@@ -29,8 +33,8 @@ try:
 except Exception:  # pragma: no cover
     tqdm = None  # type: ignore[assignment]
 
-# Reuse helpers from run_swan_main.py.
-from run_swan_main import (  # noqa: E402
+# Reuse the common batch-runner helpers.
+from runners.agent import (  # noqa: E402
     _csv_filename_from_question_id,
     _norm_db_key,
     _read_jobs,

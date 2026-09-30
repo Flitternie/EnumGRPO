@@ -104,7 +104,7 @@ run_one() {
 
   set +e
   "${DOTENV}" -f "${CLAUDE_ENV}" run -- \
-    "${PYTHON}" "${REPO_ROOT}/run_swan_main.py" \
+    "${PYTHON}" "${REPO_ROOT}/runners/agent.py" \
       --query_file "${QUERY_FILE}" \
       --db_dir "${LOCAL_DB_DIR}" \
       --out_dir "${run_dir}" \

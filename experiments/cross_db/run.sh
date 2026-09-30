@@ -94,7 +94,7 @@ for database in "${DATABASES[@]}"; do
         exit 4
       fi
       mkdir -p "${run_dir}"
-      "${PYTHON}" "${REPO_ROOT}/run_swan_main.py" \
+      "${PYTHON}" "${REPO_ROOT}/runners/agent.py" \
         --query_file "${eval_split}" \
         --prompt_file "${prompt_file}" \
         --out_dir "${run_dir}" \

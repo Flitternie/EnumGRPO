@@ -102,7 +102,7 @@ run_agent_condition() {
     mkdir -p "${run_dir}"
     set +e
     "${DOTENV}" -f "${CLAUDE_ENV}" run -- \
-      "${PYTHON}" "${REPO_ROOT}/run_swan_main.py" \
+      "${PYTHON}" "${REPO_ROOT}/runners/agent.py" \
         --query_file "${QUERY_FILE}" \
         --db_dir "${LOCAL_DB_DIR}" \
         --out_dir "${run_dir}" \
@@ -133,7 +133,7 @@ run_text2sql_condition() {
     mkdir -p "${run_dir}"
     set +e
     "${DOTENV}" -f "${CLAUDE_ENV}" run -- \
-      "${PYTHON}" "${REPO_ROOT}/run_swan_agentic_text2sql.py" \
+      "${PYTHON}" "${REPO_ROOT}/runners/agentic_text2sql.py" \
         --query_file "${QUERY_FILE}" \
         --db_dir "${LOCAL_DB_DIR}" \
         --out_dir "${run_dir}" \

@@ -26,7 +26,7 @@ export QUERY_TIMEOUT_S="${QUERY_TIMEOUT_S:-1800}"
 
 test -s "${POOL_FILE}"
 LEARNED_AGENT_SLUG="enumgrpo" PYTHON="${PYTHON}" \
-  bash "${REPO_ROOT}/run_multi_eval.sh" \
+  bash "${REPO_ROOT}/experiments/primary/run_multi_eval.sh" \
     -k 3 \
     -q "${REPO_ROOT}/swan/evaluation.jsonl" \
     -e "${POOL_FILE}" \

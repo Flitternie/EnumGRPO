@@ -7,7 +7,7 @@ keys, checkpoint / resume logic, and logging behaviour are identical.
 
 Run with:
 
-    python -m learning.reflexion.cli --config experiments/reflexion/config.yaml [overrides...]
+    python -m learning.reflexion.cli --config experiments/learning_ablation/reflexion/config.yaml [overrides...]
 """
 
 from __future__ import annotations
@@ -87,10 +87,10 @@ def main() -> NoReturn:
                 f"\n=== Checkpoint reached (step {ckpt.next_step - 1} completed) ===\n"
                 f"State saved to: {ckpt_file}\n"
                 f"\nTo resume, re-run the same command:\n"
-                f"  python -m learning.reflexion.cli --config experiments/reflexion/config.yaml\n"
+                f"  python -m learning.reflexion.cli --config experiments/learning_ablation/reflexion/config.yaml\n"
                 f"  (restart_step will be set automatically from checkpoint.json)\n"
                 f"\nOr to resume from a specific step:\n"
-                f"  python -m learning.reflexion.cli --config experiments/reflexion/config.yaml "
+                f"  python -m learning.reflexion.cli --config experiments/learning_ablation/reflexion/config.yaml "
                 f"--restart_step {ckpt.next_step}",
                 file=sys.__stderr__,
             )

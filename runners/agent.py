@@ -14,10 +14,14 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
+REPO_ROOT = Path(__file__).resolve().parents[1]
+if str(REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(REPO_ROOT))
+
 try:
     from dotenv import load_dotenv  # type: ignore
 
-    load_dotenv(Path(__file__).resolve().parent / ".env", override=False)
+    load_dotenv(REPO_ROOT / ".env", override=False)
 except Exception:
     pass
 
@@ -41,8 +45,7 @@ class Job:
 
 
 def _repo_root() -> Path:
-    # This script lives at the repo root.
-    return Path(__file__).resolve().parent
+    return REPO_ROOT
 
 
 def _agent_dir(repo_root: Path) -> Path:
@@ -698,4 +701,3 @@ def main(argv: Optional[List[str]] = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

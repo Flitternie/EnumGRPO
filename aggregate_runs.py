@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Aggregate K repeated SWAN evaluation runs and print a comparison table.
 
-Expected directory layout (produced by run_multi_eval.sh):
+Expected directory layout (produced by experiments/primary/run_multi_eval.sh):
 
     <base_dir>/
         <agent_slug>/

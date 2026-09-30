@@ -3,14 +3,13 @@
 This directory contains the reproducible launchers and configurations used by
 the paper and revision experiments:
 
-- `primary/`: EnumGRPO learning and evaluation on SWAN.
-- `vanilla_grpo/`: the ablation without structured plan enumeration.
-- `reflexion/`: the ablation without grouped comparison.
+- `primary/`: EnumGRPO learning and evaluation on SWAN, including launchers
+  for the main-table baselines.
+- `learning_ablation/`: Vanilla GRPO and Reflexion learning ablations.
 - `cross_db/`: leave-one-database-out transfer on SWAN.
+- `cross_workload/`: transfer to SemBench Movie and pure-SQL Spider/BIRD.
 - `axis_ablation/`: experience-axis deletion experiments.
 - `scalability/`: SWAN database scaling and evaluation sweep.
-- `lotus/`: execution launcher for the oracle-assisted LOTUS baseline.
-- `palimpzest/`: execution launcher for the oracle-assisted Palimpzest baseline.
 
 Each subdirectory documents its own configuration, launch commands, and output
 layout. Frozen experience pools used by these experiments are stored in

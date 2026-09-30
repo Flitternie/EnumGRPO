@@ -7,13 +7,13 @@
 #SBATCH --mem=96G
 #SBATCH --time=2-00:00:00
 #SBATCH --exclude=cpu-008-217,cpu-015-253
-#SBATCH --output=experiments/vanilla_grpo/slurm-train-%j.log
+#SBATCH --output=experiments/learning_ablation/vanilla_grpo/slurm-train-%j.log
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 EXP_ID="vanilla_grpo_swan40_n5_v1"
-TRAIN_CONFIG="${REPO_ROOT}/experiments/vanilla_grpo/config.yaml"
+TRAIN_CONFIG="${REPO_ROOT}/experiments/learning_ablation/vanilla_grpo/config.yaml"
 TRAIN_ROOT="${REPO_ROOT}/exp/learning/${EXP_ID}"
 
 cd "${REPO_ROOT}"

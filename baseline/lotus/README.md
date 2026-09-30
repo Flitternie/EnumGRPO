@@ -2,7 +2,7 @@
 
 This is a strict two-stage, non-agentic LOTUS baseline. Program generation happens once, and every measured repetition executes the exact same saved program.
 
-The three-run paper setup is available at `experiments/lotus/run.sbatch`.
+The three-run paper setup is available at `experiments/primary/baselines/lotus/run.sbatch`.
 
 ## Code structure
 

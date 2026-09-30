@@ -36,7 +36,7 @@ fi
 
 mkdir -p "${OUT_DIR}"
 "${DOTENV}" -f "${REPO_ROOT}/.env" run -- \
-  "${PYTHON}" "${REPO_ROOT}/run_swan_main.py" \
+  "${PYTHON}" "${REPO_ROOT}/runners/agent.py" \
     --query_file "${REPO_ROOT}/datasets/spider1/prepared/evaluation_extra_duckdb_agent.jsonl" \
     --db_dir "${REPO_ROOT}/datasets/spider1/prepared/database" \
     --out_dir "${OUT_DIR}" \

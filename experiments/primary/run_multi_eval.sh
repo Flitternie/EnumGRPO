@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
-# run_multi_eval.sh -- Run 4 SWAN agents for K repetitions, evaluate each run,
-# and print an aggregated comparison table (mean +/- SD) matching results_comparison.md.
+# Repeat one SWAN agent condition K times, evaluate each run, and aggregate
+# the resulting metrics (mean +/- SD).
 #
 # Usage:
-#   bash run_multi_eval.sh [OPTIONS]
+#   bash experiments/primary/run_multi_eval.sh [OPTIONS]
 #
 # Options:
 #   -k K              Number of repetitions            (default: 3)
@@ -13,12 +13,7 @@
 #   --skip-runs       Skip agent runs; only aggregate existing eval_summary.json files
 #   -h                Show this help
 #
-# Agents:
-#   text2sql    -- agentic Text2SQL baseline
-#   blendsql    -- agentic BlendSQL baseline
-#   db_agent    -- DB Agent (no experiences)
-#   db_agent_lx -- DB Agent with learned experiences
-#                 Override label with LEARNED_AGENT_SLUG=...
+# LEARNED_AGENT_SLUG controls the output label (default: db_agent_lx).
 #
 # Required env vars (can live in .env):
 #   AGENT_MODEL, LLMOP_MODEL, DB_FILES_DIR, QUERY_TIMEOUT_S, QUERY_CONCURRENCY
@@ -34,7 +29,7 @@ QUERY_FILE="swan/evaluation.jsonl"
 EXPERIENCES_FILE="exp/learning/haiku/experiences/latest.json"
 SKIP_RUNS=0
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 
 # ---------------------------------------------------------------------------
 # Argument parsing
@@ -94,11 +89,11 @@ LEARNED_AGENT_SLUG="${LEARNED_AGENT_SLUG:-db_agent_lx}"
 AGENT_SLUGS=("$LEARNED_AGENT_SLUG")
 
 declare -A AGENT_SCRIPTS
-AGENT_SCRIPTS[text2sql]="run_swan_agentic_text2sql.py"
-AGENT_SCRIPTS[blendsql]="run_swan_agentic_blendsql.py"
-AGENT_SCRIPTS[db_agent]="run_swan_main.py"
-AGENT_SCRIPTS[db_agent_lx]="run_swan_main.py"
-AGENT_SCRIPTS["$LEARNED_AGENT_SLUG"]="run_swan_main.py"
+AGENT_SCRIPTS[text2sql]="runners/agentic_text2sql.py"
+AGENT_SCRIPTS[blendsql]="runners/agentic_blendsql.py"
+AGENT_SCRIPTS[db_agent]="runners/agent.py"
+AGENT_SCRIPTS[db_agent_lx]="runners/agent.py"
+AGENT_SCRIPTS["$LEARNED_AGENT_SLUG"]="runners/agent.py"
 
 # Extra CLI args per agent (will be word-split via read -ra)
 declare -A AGENT_EXTRA

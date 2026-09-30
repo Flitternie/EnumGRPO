@@ -5,5 +5,6 @@ reward, and pool-update procedure, but distills each trajectory independently
 without within-query grouped comparison. The learning implementation lives in
 `learning/reflexion/`.
 
-Train with `sbatch experiments/reflexion/train.sbatch` and evaluate the frozen
-artifact pool with `sbatch experiments/reflexion/eval.sbatch`.
+Train with `sbatch experiments/learning_ablation/reflexion/train.sbatch` and
+evaluate the frozen artifact pool with
+`sbatch experiments/learning_ablation/reflexion/eval.sbatch`.

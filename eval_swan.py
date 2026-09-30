@@ -645,7 +645,7 @@ def main(argv: Optional[List[str]] = None) -> int:
     gt_map = load_ground_truth_jsonl(query_file)
     print(f"Loaded {len(gt_map)} ground truth entries from {query_file}", file=sys.stderr)
 
-    # Load per-query wall-clock times from results.jsonl (produced by run_swan_main.py).
+    # Load per-query wall-clock times from results.jsonl (produced by runners/agent.py).
     # Gracefully absent for older runs or text2sql (empty file).
     elapsed_map: Dict[str, float] = {}
     results_jsonl = run_dir / "results.jsonl"

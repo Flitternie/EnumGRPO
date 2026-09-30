@@ -6,13 +6,13 @@
 #SBATCH --cpus-per-task=16
 #SBATCH --mem=96G
 #SBATCH --time=2-00:00:00
-#SBATCH --output=experiments/reflexion/slurm-train-%j.log
+#SBATCH --output=experiments/learning_ablation/reflexion/slurm-train-%j.log
 
 set -euo pipefail
 
-REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../../.." && pwd)"
 PYTHON="${PYTHON:-python3}"
-CONFIG="${REPO_ROOT}/experiments/reflexion/config.yaml"
+CONFIG="${REPO_ROOT}/experiments/learning_ablation/reflexion/config.yaml"
 
 cd "${REPO_ROOT}"
 unset OTEL_ENDPOINT OTEL_EXPORTER_OTLP_ENDPOINT OTEL_EXPORTER_OTLP_TRACES_ENDPOINT

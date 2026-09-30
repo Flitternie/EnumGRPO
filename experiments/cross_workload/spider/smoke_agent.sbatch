@@ -35,7 +35,7 @@ echo "[$(date -Is)] Spider agent smoke: ${QUESTION_ID}"
 echo "Output: ${OUT_DIR}"
 
 "${DOTENV}" -f "${GPT_ENV}" run -- \
-  "${PYTHON}" "${REPO_ROOT}/run_swan_main.py" \
+  "${PYTHON}" "${REPO_ROOT}/runners/agent.py" \
     --query_file "${QUERY_FILE}" \
     --db_dir "${DB_DIR}" \
     --out_dir "${OUT_DIR}" \

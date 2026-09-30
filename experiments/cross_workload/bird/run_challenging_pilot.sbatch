@@ -41,7 +41,7 @@ run_condition() {
   mkdir -p "${run_dir}"
   set +e
   "${DOTENV}" -f "${REPO_ROOT}/.env" run -- \
-    "${PYTHON}" "${REPO_ROOT}/run_swan_main.py" \
+    "${PYTHON}" "${REPO_ROOT}/runners/agent.py" \
       --query_file "${QUERY_FILE}" --db_dir "${LOCAL_ROOT}/database" \
       --out_dir "${run_dir}" --prompt_file "${prompt}" \
       --concurrency 4 --timeout_s 1800

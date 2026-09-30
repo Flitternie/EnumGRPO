@@ -21,20 +21,21 @@ Each learning batch runs `grpo_n` rollouts per query, seeded with different axis
 - `agent/`: DB agent runtime and prompts.
 - `baseline/`: Agentic Text2SQL, BlendSQL, LOTUS, and Palimpzest baselines.
 - `learning/`: EnumGRPO learning loop, reward scoring, and rollout management.
+- `runners/`: reusable batch runners for the agent and agentic baselines.
 - `experiments/`: reproducible launchers and configurations for the primary
   experiment, transfer studies, and revision baselines.
 - `artifacts/experiences/`: frozen experience pools used by the reported
   EnumGRPO, Vanilla GRPO, and Reflexion evaluations.
 - `swan/`: SWAN JSONL data and evaluation helpers.
 - `tools/`: MCP database tools such as SQL execution, relation inspection, and LLM operators.
-- `run_multi_eval.sh`: repeated main evaluation across baselines and learned agent.
 
 The canonical experiment names used throughout the repository are
 `enumgrpo`, `vanilla_grpo`, and `reflexion`. The paper's cross-database
 transfer setup lives in `experiments/cross_db/`; `learning/per_db/` is a
 separate implementation that maintains one experience pool per database.
 Cross-workload SemBench, Spider, and BIRD experiments live in
-`experiments/cross_workload/`.
+`experiments/cross_workload/`, while learning ablations live in
+`experiments/learning_ablation/`.
 
 ## Setup
 
@@ -109,25 +110,25 @@ python -m learning.cli \
 Run repeated evaluation of a learned agent prompt:
 
 ```bash
-bash run_multi_eval.sh -k 3 \
+bash experiments/primary/run_multi_eval.sh -k 3 \
   -q swan/evaluation.jsonl \
   -e artifacts/experiences/swan_enumgrpo.json
 ```
 
 This script evaluates the learned DB agent prompt against the SWAN evaluation set and aggregates repeated runs under `exp/multi_eval_<timestamp>/`. Use `--skip-runs` to re-aggregate existing `eval_summary.json` files.
 
-Run individual baseline agents when needed:
+Run individual agent conditions when needed:
 
 ```bash
-python run_swan_agentic_text2sql.py --query_file swan/evaluation.jsonl --out_dir exp/text2sql_eval
-python run_swan_agentic_blendsql.py --query_file swan/evaluation.jsonl --out_dir exp/blendsql_eval
-python run_swan_main.py --query_file swan/evaluation.jsonl --out_dir exp/db_agent_eval
+python runners/agentic_text2sql.py --query_file swan/evaluation.jsonl --out_dir exp/text2sql_eval
+python runners/agentic_blendsql.py --query_file swan/evaluation.jsonl --out_dir exp/blendsql_eval
+python runners/agent.py --query_file swan/evaluation.jsonl --out_dir exp/db_agent_eval
 ```
 
 The revision also includes oracle-assisted LOTUS and Palimpzest baselines.
 Their adapters, pinned upstream revisions, and committed fixed programs are
 documented in `baseline/lotus/` and `baseline/palimpzest/`; three-run launchers
-are provided under `experiments/lotus/` and `experiments/palimpzest/`.
+are provided under `experiments/primary/baselines/`.
 
 Score any run directory with:
 

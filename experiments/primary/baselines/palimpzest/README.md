@@ -8,7 +8,7 @@ After checking out the pinned Palimpzest revision described there, run:
 
 ```bash
 PALIMPZEST_SYSTEM_DIR=/path/to/palimpzest \
-  sbatch experiments/palimpzest/run.sbatch
+  sbatch experiments/primary/baselines/palimpzest/run.sbatch
 ```
 
 Set `PALIMPZEST_OUTPUT_ROOT`, `PYTHON`, or `PALIMPZEST_SYSTEM_DIR` to override
