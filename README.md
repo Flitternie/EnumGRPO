@@ -33,6 +33,8 @@ The canonical experiment names used throughout the repository are
 `enumgrpo`, `vanilla_grpo`, and `reflexion`. The paper's cross-database
 transfer setup lives in `experiments/cross_db/`; `learning/per_db/` is a
 separate implementation that maintains one experience pool per database.
+Cross-workload SemBench, Spider, and BIRD experiments live in
+`experiments/cross_workload/`.
 
 ## Setup
 
